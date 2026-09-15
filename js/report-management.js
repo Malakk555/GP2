@@ -7,52 +7,67 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableBody = document.getElementById("reportsManagementTable");
 
 
-  /* No game selected */
-  if (!gameId) {
-
-    gameName.textContent = "Game Not Found";
-
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="4">
-          No game was selected.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
   try {
 
-    const response = await fetch(
-      `api/game-reports.php?game_id=${encodeURIComponent(gameId)}`
-    );
+    /* =========================================
+       CHOOSE API URL
+    ========================================== */
+
+    const apiUrl = gameId
+      ? `api/game-reports.php?game_id=${encodeURIComponent(gameId)}`
+      : "api/game-reports.php";
+
+
+    const response = await fetch(apiUrl);
 
     const data = await response.json();
 
 
     if (!data.success) {
-      throw new Error(data.message || "Failed to load reports");
+      throw new Error(
+        data.message || "Failed to load complaints"
+      );
     }
 
 
-    /* Game name */
-    gameName.textContent = data.game.game_name;
+    /* =========================================
+       PAGE TITLE
+    ========================================== */
+
+    if (gameId && data.game) {
+
+      gameName.textContent =
+        `${data.game.game_name} Complaints`;
+
+    } else {
+
+      gameName.textContent =
+        "All Complaints";
+
+    }
 
 
-    /* Clear loading row */
+    /* =========================================
+       CLEAR LOADING ROW
+    ========================================== */
+
     tableBody.innerHTML = "";
 
 
-    /* No reports */
-    if (data.reports.length === 0) {
+    /* =========================================
+       NO COMPLAINTS
+    ========================================== */
+
+    if (!data.reports || data.reports.length === 0) {
 
       tableBody.innerHTML = `
         <tr>
           <td colspan="4">
-            No reports found for this game.
+            ${
+              gameId
+                ? "No complaints found for this game."
+                : "No complaints found."
+            }
           </td>
         </tr>
       `;
@@ -61,22 +76,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    /* Reports */
+    /* =========================================
+       DISPLAY COMPLAINTS
+    ========================================== */
+
     data.reports.forEach(report => {
 
-      const row = document.createElement("tr");
+      const row =
+        document.createElement("tr");
+
 
       const severityClass =
-        report.severity.toLowerCase();
+        String(report.severity || "")
+          .toLowerCase();
+
 
       row.innerHTML = `
+
         <td>
-          <strong>${report.title}</strong>
+          <strong>
+            ${report.title || "-"}
+          </strong>
         </td>
+
 
         <td>
           ${report.behavior || "-"}
         </td>
+
 
         <td>
           <span class="risk-badge ${severityClass}">
@@ -84,10 +111,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           </span>
         </td>
 
+
         <td>
           ${report.location || "-"}
         </td>
+
       `;
+
 
       tableBody.appendChild(row);
 
@@ -96,14 +126,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Complaints error:",
+      error
+    );
 
-    gameName.textContent = "Unable to Load Reports";
+
+    gameName.textContent =
+      "Unable to Load Complaints";
+
 
     tableBody.innerHTML = `
       <tr>
         <td colspan="4">
-          Unable to load report data.
+          Unable to load complaint data.
         </td>
       </tr>
     `;

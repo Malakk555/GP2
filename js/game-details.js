@@ -235,7 +235,7 @@ if (reportForm) {
     behaviorOtherText.value = "";
   }
 
-  showToast("Report submitted successfully.");
+  showToast("Complaint submitted successfully.");
 closeReportModal();
 } else {
   if (reportMessage) {
@@ -249,7 +249,7 @@ closeReportModal();
         const reportMessage = document.getElementById("reportMessage");
         if (reportMessage) {
           reportMessage.textContent =
-            "Cannot submit report. Check Console.";
+            "Cannot submit complaint. Check Console.";
         }
       });
   });

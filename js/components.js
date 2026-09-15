@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="comparison.html">Compare</a>
       <a href="tracked-games.html">Tracked Games</a>
       <a href="recommendations.html">Recommendations</a>
-      <a href="my-reports.html">My Reports</a>
+      <a href="my-reports.html">My Complaints</a>
       <a href="profile.html">Profile</a>
     `,
 
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="home.html">Dashboard</a>
       <a href="games.html">Games Monitoring</a>
       <a href="game-details.html">Risk Details</a>
-      <a href="my-reports.html">Reports</a>
+      <a href="my-reports.html">Complaints</a>
       <a href="profile.html">Profile</a>
     `,
 

@@ -15,85 +15,111 @@ $game_id = filter_input(
     FILTER_VALIDATE_INT
 );
 
-if (!$game_id) {
-
-    http_response_code(400);
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid game ID"
-    ]);
-
-    exit;
-}
+$game = null;
 
 
 /* =========================================
    GET GAME INFORMATION
 ========================================= */
 
-$gameStmt = $conn->prepare("
-    SELECT
-        game_id,
-        game_name
-    FROM games
-    WHERE game_id = ?
-");
+if ($game_id) {
 
-$gameStmt->bind_param("i", $game_id);
-$gameStmt->execute();
+    $gameStmt = $conn->prepare("
+        SELECT
+            game_id,
+            game_name
+        FROM games
+        WHERE game_id = ?
+    ");
 
-$gameResult = $gameStmt->get_result();
+    $gameStmt->bind_param("i", $game_id);
+    $gameStmt->execute();
 
-if ($gameResult->num_rows === 0) {
+    $gameResult = $gameStmt->get_result();
 
-    http_response_code(404);
+    if ($gameResult->num_rows === 0) {
 
-    echo json_encode([
-        "success" => false,
-        "message" => "Game not found"
-    ]);
+        http_response_code(404);
 
-    exit;
+        echo json_encode([
+            "success" => false,
+            "message" => "Game not found"
+        ]);
+
+        exit;
+    }
+
+    $game = $gameResult->fetch_assoc();
 }
-
-$game = $gameResult->fetch_assoc();
 
 
 /* =========================================
    GET REPORTS FOR THIS GAME
 ========================================= */
 
-$stmt = $conn->prepare("
-    SELECT
-        report_id,
-        title,
+if ($game_id) {
 
-        behavior_toxic,
-        behavior_bullying,
-        behavior_hate,
-        behavior_sexual,
-        behavior_threat,
-        behavior_other,
+    $stmt = $conn->prepare("
+        SELECT
+            report_id,
+            title,
 
-        severity,
+            behavior_toxic,
+            behavior_bullying,
+            behavior_hate,
+            behavior_sexual,
+            behavior_threat,
+            behavior_other,
 
-        location_chat,
-        location_gameplay,
-        location_community,
+            severity,
 
-        date_reported
+            location_chat,
+            location_gameplay,
+            location_community,
 
-    FROM reports
+            date_reported
 
-    WHERE game_id = ?
+        FROM reports
 
-    ORDER BY
-        date_reported DESC,
-        report_id DESC
-");
+        WHERE game_id = ?
 
-$stmt->bind_param("i", $game_id);
+        ORDER BY
+            date_reported DESC,
+            report_id DESC
+    ");
+
+    $stmt->bind_param("i", $game_id);
+
+} else {
+
+    $stmt = $conn->prepare("
+        SELECT
+            report_id,
+            title,
+
+            behavior_toxic,
+            behavior_bullying,
+            behavior_hate,
+            behavior_sexual,
+            behavior_threat,
+            behavior_other,
+
+            severity,
+
+            location_chat,
+            location_gameplay,
+            location_community,
+
+            date_reported
+
+        FROM reports
+
+        ORDER BY
+            date_reported DESC,
+            report_id DESC
+    ");
+}
+
 $stmt->execute();
 
 $result = $stmt->get_result();
@@ -190,21 +216,23 @@ while ($row = $result->fetch_assoc()) {
 echo json_encode([
     "success" => true,
 
-    "game" => [
-        "game_id" =>
-            (int)$game["game_id"],
-
-        "game_name" =>
-            $game["game_name"]
-    ],
+    "game" => $game
+        ? [
+            "game_id" => (int)$game["game_id"],
+            "game_name" => $game["game_name"]
+        ]
+        : null,
 
     "reports" => $reports
 
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 
-$stmt->close();
-$gameStmt->close();
-$conn->close();
 
+
+if ($game_id && isset($gameStmt)) {
+    $gameStmt->close();
+}
+
+$conn->close();
 ?>

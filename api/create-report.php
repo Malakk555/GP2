@@ -116,7 +116,7 @@ try {
   // Insert the submitted report into the database
   echo json_encode([
     "success" => true,
-    "message" => "Report submitted successfully"
+    "message" => "Complaint submitted successfully"
   ]);
 
   $stmt->close();

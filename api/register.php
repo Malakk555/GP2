@@ -7,7 +7,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 $firstName = trim($data['first_name'] ?? '');
 $lastName  = trim($data['last_name'] ?? '');
-$email     = trim($data['email'] ?? '');
+$email     = strtolower(trim($data['email'] ?? ''));
 $password  = $data['password'] ?? '';
 
 $requestedRole = $data['role'] ?? 'individual';
@@ -27,6 +27,16 @@ if ($firstName === '' || $lastName === '' || $email === '' || $password === '') 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Please enter a valid email.']);
+    exit;
+}
+
+// Government employee accounts must use the official organization email domain.
+if ($role === 'government' && !preg_match('/^[A-Z0-9._%+-]+@gmedia\.gov\.sa$/i', $email)) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Government employee accounts must use an official @gmedia.gov.sa email address.'
+    ]);
     exit;
 }
 
@@ -66,11 +76,22 @@ $firstCol = pick_column($columns, ['first_name', 'firstname', 'fname']);
 $lastCol  = pick_column($columns, ['last_name', 'lastname', 'lname']);
 $nameCol  = pick_column($columns, ['name', 'full_name', 'username']);
 $roleCol  = pick_column($columns, ['role', 'user_role', 'type']);
+$statusCol = pick_column($columns, ['status', 'account_status']);
 
 // Ensure that the required columns exist
 if (!$emailCol || !$passCol) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'users table must contain email and password columns.']);
+    exit;
+}
+
+// Government employee approval depends on the account status column.
+if ($role === 'government' && !$statusCol) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'users table must contain a status column for employee approval requests.'
+    ]);
     exit;
 }
 
@@ -102,8 +123,21 @@ if (!$firstCol && !$lastCol && $nameCol) { $insertColumns[] = "`$nameCol`"; $val
 $insertColumns[] = "`$emailCol`"; $values[] = $email; $types .= 's';
 $insertColumns[] = "`$passCol`";  $values[] = password_hash($password, PASSWORD_DEFAULT); $types .= 's';
 
-// Set the default role for newly registered users
-if ($roleCol) { $insertColumns[] = "`$roleCol`"; $values[] = $role; $types .= 's'; }
+// Set role and approval status for newly registered users.
+if ($roleCol) {
+    $insertColumns[] = "`$roleCol`";
+    $values[] = $role;
+    $types .= 's';
+}
+
+$status = $role === 'government' ? 'pending' : 'active';
+
+if ($statusCol) {
+    $insertColumns[] = "`$statusCol`";
+    $values[] = $status;
+    $types .= 's';
+}
+
 // Insert the new user into the database
 $placeholders = implode(',', array_fill(0, count($values), '?'));
 $sql = "INSERT INTO `users` (" . implode(',', $insertColumns) . ") VALUES ($placeholders)";
@@ -113,19 +147,44 @@ $stmt->bind_param($types, ...$values);
 if ($stmt->execute()) {
     $user_id = $stmt->insert_id;
 
-// Store the new user's information in the session
-$_SESSION["user_id"] = $user_id;
-$_SESSION["user_name"] = $firstName . " " . $lastName;
-$_SESSION["user_email"] = $email;
-$_SESSION["user_role"] = $role;
+    // Employee accounts are approval requests. Do not create a logged-in session yet.
+    if ($role === 'government') {
+        session_unset();
+
+        echo json_encode([
+            'success' => true,
+            'requires_approval' => true,
+            'message' => 'Your employee access request has been sent to the administrator for approval.',
+            'user' => [
+                'id' => $user_id,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $email,
+                'role' => $role,
+                'status' => $status
+            ]
+        ]);
+        exit;
+    }
+
+    // Individual accounts can start an active session immediately.
+    $_SESSION["user_id"] = $user_id;
+    $_SESSION["user_name"] = $firstName . " " . $lastName;
+    $_SESSION["user_email"] = $email;
+    $_SESSION["user_role"] = $role;
+    $_SESSION["user_status"] = $status;
+
     echo json_encode([
         'success' => true,
+        'requires_approval' => false,
         'message' => 'Account created successfully.',
         'user' => [
             'id' => $user_id,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'email' => $email
+            'email' => $email,
+            'role' => $role,
+            'status' => $status
         ]
     ]);
 } else {

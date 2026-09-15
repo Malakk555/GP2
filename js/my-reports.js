@@ -22,7 +22,7 @@ async function loadReports() {
     if (data.reports.length === 0) {
       reportsBody.innerHTML = `
         <tr>
-          <td colspan="5">No reports found.</td>
+          <td colspan="5">No complaints found.</td>
         </tr>
       `;
       return;
@@ -41,7 +41,7 @@ async function loadReports() {
   } catch (error) {
     reportsBody.innerHTML = `
       <tr>
-        <td colspan="5">Cannot load reports.</td>
+        <td colspan="5">Cannot load complaints.</td>
       </tr>
     `;
   }

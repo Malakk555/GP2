@@ -19,7 +19,7 @@
       <div class="links">
         <a href="home.html">Home</a>
         <a href="games.html">Games</a>
-        <a href="my-reports.html">Reports</a>
+        <a href="my-reports.html">Complaints</a>
         <a href="tracked-games.html">My List</a>
         <a class="btn" href="main-home.html">Log Out</a>
         <button onclick="toggleTheme()" class="icon">🌙</button>
@@ -40,7 +40,7 @@
         <p>
           <b>Description:</b>
           <span id="gameDescription">
-            AI-analyzed gaming community risk report based on public reviews and player interactions.
+            AI-analyzed gaming community risk assessment based on public reviews and player interactions.
           </span>
         </p>
 
@@ -55,7 +55,7 @@
          <a class="btn" id="saferAlternativeBtn" href="#">
   Safer Alternative
 </a> 
-         <button class="btn" onclick="openReportModal()">Report</button>
+         <button class="btn" onclick="openReportModal()">Submit Complaint</button>
         </div>
       </div>
 
@@ -102,7 +102,7 @@
       <div class="reportBox">
         <button class="closeBtn" onclick="closeReportModal()">×</button>
 
-        <h2>Submit Report</h2>
+        <h2>Submit Complaint</h2>
 
         <div class="reportInfo">
           <p><b>Game:</b> <span id="reportGameName">Game Name</span></p>
@@ -114,7 +114,7 @@
           <input type="hidden" id="reportGameId" name="game_id">
 
           <div class="field">
-            <label>Report Title</label>
+            <label>Complaint Title</label>
             <input type="text" name="title" required placeholder="Example: Offensive Language">
           </div>
 
@@ -199,7 +199,7 @@
             </label>
           </div>
 
-          <button type="submit" class="btn">Submit Report</button>
+          <button type="submit" class="btn">Submit Complaint</button>
           <p id="reportMessage" class="mini"></p>
         </form>
       </div>

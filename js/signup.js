@@ -126,10 +126,10 @@ accountTypeCards.forEach(card => {
       emailLabel.textContent = 'Work email';
 
       signupEmail.placeholder =
-        'Enter your organization email';
+        'name@gmedia.gov.sa';
 
       employeeEmailHint.textContent =
-        'Use the email address provided by your organization. Personal email addresses are not accepted.';
+        'Use your official @gmedia.gov.sa email address. Other email domains are not accepted.';
 
       employeeEmailHint.hidden = false;
 
@@ -280,6 +280,21 @@ signupForm.addEventListener(
 
 
 
+    if (
+      selectedRole === 'employee' &&
+      !/^[A-Z0-9._%+-]+@gmedia\.gov\.sa$/i.test(email)
+    ) {
+
+      showSignupMessage(
+        'Employee accounts must use an official @gmedia.gov.sa email address.',
+        'error'
+      );
+
+      return;
+    }
+
+
+
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
@@ -363,6 +378,27 @@ signupForm.addEventListener(
 
         return;
 
+      }
+
+
+
+      if (result.requires_approval) {
+
+        localStorage.removeItem('diraUser');
+
+        showSignupMessage(
+          result.message ||
+          'Your employee access request has been sent to the administrator for approval.',
+          'success'
+        );
+
+        signupForm.reset();
+
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1800);
+
+        return;
       }
 
 

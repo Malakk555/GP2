@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>My Reports</title>
+    <title>My Complaints</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -20,7 +20,7 @@
             <div class="links">
                 <a href="home.html">Home</a>
                 <a href="games.html">Games</a>
-                <a class="active" href="my-reports.html">Reports</a>
+                <a class="active" href="my-reports.html">Complaints</a>
                 <a href="tracked-games.html">My List</a>
                 <a class="btn" href="main-home.html">Log Out</a>
                 <button onclick="toggleTheme()" class="icon">🌙</button>
@@ -30,7 +30,7 @@
 
         <!-- Content -->
         <section class="section">
-            <h1 style="font-size:32px">My Reports</h1>
+            <h1 style="font-size:32px">My Complaints</h1>
 
             <div class="tableWrap animate">
                 <table>
@@ -39,7 +39,7 @@
                             <th>Game</th>
                             <th>Title</th>
                             <th>Description</th>
-                            <th>Date Reported</th>
+                            <th>Date Submitted</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -48,7 +48,7 @@
                         <!-- Loading state -->
                         <tr>
                             <td colspan="5" style="text-align:center; opacity:.6;">
-                                Loading reports...
+                                Loading complaints...
                             </td>
                         </tr>
                     </tbody>

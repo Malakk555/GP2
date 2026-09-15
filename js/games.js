@@ -8,6 +8,32 @@ const selectedCount = document.getElementById("selectedCount");
 const clearCompareBtn = document.getElementById("clearCompareBtn");
 const startComparisonBtn = document.getElementById("startComparisonBtn");
 
+const gamesHomeLink = document.getElementById("gamesHomeLink");
+const gamesComplaintsLink = document.getElementById("gamesComplaintsLink");
+
+let loggedUser = {};
+
+try {
+  loggedUser = JSON.parse(
+    localStorage.getItem("diraUser") || "{}"
+  );
+} catch (error) {
+  console.error("Cannot read logged user:", error);
+}
+
+const currentRole =
+  loggedUser.role || localStorage.getItem("role");
+
+if (currentRole === "government") {
+  if (gamesHomeLink) {
+    gamesHomeLink.href = "government-dashboard.html";
+  }
+
+  if (gamesComplaintsLink) {
+    gamesComplaintsLink.href = "report-management.html";
+  }
+}
+
 let selectedGames = [];
 let currentGames = [];
 let trackedGames = [];
@@ -235,33 +261,39 @@ applyFilters();
   }
 });
 
-compareTrayGames.addEventListener("click", (event) => {
-  const removeButton = event.target.closest(".removeCompareGame");
+if (compareTrayGames) {
+  compareTrayGames.addEventListener("click", (event) => {
+    const removeButton = event.target.closest(".removeCompareGame");
 
-  if (!removeButton) return;
+    if (!removeButton) return;
 
-  const gameId = String(removeButton.dataset.id);
+    const gameId = String(removeButton.dataset.id);
 
-  selectedGames = selectedGames.filter(id => id !== gameId);
+    selectedGames = selectedGames.filter(id => id !== gameId);
 
-  applyFilters();
-  updateCompareTray();
-});
+    applyFilters();
+    updateCompareTray();
+  });
+}
 
-clearCompareBtn.addEventListener("click", () => {
-  selectedGames = [];
+if (clearCompareBtn) {
+  clearCompareBtn.addEventListener("click", () => {
+    selectedGames = [];
 
-  applyFilters();
-  updateCompareTray();
-});
+    applyFilters();
+    updateCompareTray();
+  });
+}
 
-startComparisonBtn.addEventListener("click", () => {
-  if (selectedGames.length < 2) return;
+if (startComparisonBtn) {
+  startComparisonBtn.addEventListener("click", () => {
+    if (selectedGames.length < 2) return;
 
-  const gameIds = selectedGames.join(",");
+    const gameIds = selectedGames.join(",");
 
-  window.location.href = `comparison.html?games=${gameIds}`;
-});
+    window.location.href = `comparison.html?games=${gameIds}`;
+  });
+}
 
 
 async function loadTrackedGames() {
@@ -327,7 +359,9 @@ function applyFilters() {
   render(filteredGames);
 }
 
-searchInput.addEventListener("input", applyFilters);
+if (searchInput) {
+  searchInput.addEventListener("input", applyFilters);
+}
 
 if (riskFilter) {
   riskFilter.addEventListener("change", applyFilters);

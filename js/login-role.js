@@ -6,7 +6,7 @@ const loginBtn = document.getElementById('loginBtn');
 function showLoginMessage(text, type) {
   loginMessage.hidden = false;
   loginMessage.textContent = text;
-  loginMessage.className = `formMessage ${type}`;
+  loginMessage.className = `formMessage authMessage ${type}`;
 }
 
 loginForm.addEventListener('submit', async (event) => {

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Report Management | DIR'A</title>
+  <title>Complaint Management | DIR'A</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -19,58 +19,70 @@
          HEADER
     ========================== -->
 
-    <nav class="nav">
+  <nav class="nav">
 
-      <a href="government-dashboard.html" class="logo logo-switch">
+  <a href="government-dashboard.html" class="logo logo-switch">
 
-        <img
-          src="images/black-logo.png"
-          class="logo-light"
-          alt="DIR'A Logo"
-        >
+    <img
+      src="images/black-logo.png"
+      class="logo-light"
+      alt="DIR'A Logo"
+    >
 
-        <img
-          src="images/white-logo.png"
-          class="logo-dark"
-          alt="DIR'A Logo"
-        >
+    <img
+      src="images/white-logo.png"
+      class="logo-dark"
+      alt="DIR'A Logo"
+    >
 
-      </a>
+  </a>
 
 
-      <div class="links">
+  <div class="links">
 
-        <a href="government-dashboard.html">
-          Home
-        </a>
+    <a href="government-dashboard.html">
+      Home
+    </a>
 
-        <a href="games.html">
-          Games
-        </a>
+    <a href="games.html">
+      Games
+    </a>
 
-        <a href="tracked-games.html">
-          My List
-        </a>
+    <a
+      class="active"
+      href="report-management.html"
+    >
+      Complaints
+    </a>
 
-        <a class="btn" href="main-home.html">
-          Log Out
-        </a>
+    <a href="tracked-games.html">
+      My List
+    </a>
 
-        <button
-          onclick="toggleTheme()"
-          class="icon">
-          🌙
-        </button>
+    <a
+      class="btn"
+      href="main-home.html"
+    >
+      Log Out
+    </a>
 
-        <a
-          class="icon profileIcon"
-          href="profile.html">
-          👤
-        </a>
+    <button
+      onclick="toggleTheme()"
+      class="icon"
+    >
+      🌙
+    </button>
 
-      </div>
+    <a
+      class="icon profileIcon"
+      href="profile.html"
+    >
+      👤
+    </a>
 
-    </nav>
+  </div>
+
+</nav>
 
 
 
@@ -81,7 +93,7 @@
     <section class="section">
 
       <p class="mini">
-        REPORT MANAGEMENT
+        COMPLAINT MANAGEMENT
       </p>
 
       <h1 id="reportGameName">
@@ -89,7 +101,7 @@
       </h1>
 
       <p class="mini">
-        Submitted reports for this game
+        Submitted complaints for this game
       </p>
 
     </section>
@@ -111,7 +123,7 @@
             <tr>
 
               <th>
-                Report Title
+                Complaint Title
               </th>
 
               <th>
@@ -136,7 +148,7 @@
             <tr>
 
               <td colspan="4">
-                Loading reports...
+                Loading complaints...
               </td>
 
             </tr>
