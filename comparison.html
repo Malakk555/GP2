@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Game Comparison</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main class="page">
+        <nav class="nav">
+                       <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+            <div class="links"><a href="home.html">Home</a><a class="active" href="games.html">Games</a><a
+                    href="my-reports.html">Reports</a><a href="tracked-games.html">My List</a><a class="btn"
+                    href="main-home.html">Log Out</a><button onclick="toggleTheme()" class="icon">🌙</button>
+                    <a class="icon profileIcon" href="profile.html">👤</a>
+        </nav>
+       <section class="section compare-setup">
+  <h2>Compare Games</h2>
+  <p class="mini">Select two games to compare their risk levels and toxicity breakdown.</p>
+
+  <div class="compare-selectors">
+
+  <div class="autocomplete">
+    <input id="gameOneSearch" placeholder="Search first game..." autocomplete="off">
+    <div id="gameOneSuggestions" class="suggestions"></div>
+  </div>
+
+  <div class="autocomplete">
+    <input id="gameTwoSearch" placeholder="Search second game..." autocomplete="off">
+    <div id="gameTwoSuggestions" class="suggestions"></div>
+  </div>
+
+  <input type="hidden" id="gameOne">
+  <input type="hidden" id="gameTwo">
+
+  <button class="btn" onclick="compareGames()">Compare</button>
+
+</div>
+
+  <p id="compareMessage" class="mini"></p>
+</section>
+
+<section id="comparisonResult" class="section comparison-result" style="display:none;">
+  <div class="compare-grid">
+    <div class="compare-card">
+      <div class="top-pills compare-risk-level">
+  <span id="gameOneRiskLevel" class="pill">Low</span>
+</div>
+      <img id="gameOneImage" class="thumb" />
+      <h3 id="gameOneName"></h3>
+<p class="risk-label">Risk Score</p>
+
+<div class="risk-circle" id="circleOne">
+  <span id="riskOne">0%</span>
+</div>
+
+      <div id="breakdownOne"></div>
+    </div>
+
+    <div class="vs-circle">
+      VS
+      <span>↔</span>
+    </div>
+
+    <div class="compare-card">
+      <div class="top-pills compare-risk-level">
+  <span id="gameTwoRiskLevel" class="pill">Low</span>
+</div>
+      <img id="gameTwoImage" class="thumb" />
+      <h3 id="gameTwoName"></h3>
+<p class="risk-label">Risk Score</p>
+
+<div class="risk-circle" id="circleTwo">
+  <span id="riskTwo">0%</span>
+</div>
+
+      <div id="breakdownTwo"></div>
+    </div>
+  </div>
+
+  <div class="result-box">
+    <h2>Result</h2>
+    <p id="resultText"></p>
+  </div>
+</section>
+          <footer class="footer">
+            <h3 class="footer-logo logo-switch">
+  <img src="images/black-logo.png" alt="Dir Logo" class="logo-light">
+  <img src="images/white-logo.png" alt="Dir Logo" class="logo-dark">
+</h3>
+            <div class="social">○ □ △ ×</div>
+            <p class="mini">
+  <a href="about.html">About Us</a>
+</p>
+        </footer>
+    </main>
+    <script src="js/common.js"></script>
+<script src="js/comparison.js"></script>
+</body>
+
+</html>

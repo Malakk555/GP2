@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="page">
+
+    <!-- Navbar -->
+    <nav class="nav">
+      <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+      <div class="links">
+        <a href="home.html">Home</a>
+        <a href="games.html">Games</a>
+        <a href="my-reports.html">Reports</a>
+        <a href="tracked-games.html">My List</a>
+        <a class="btn" href="main-home.html">Log Out</a>
+        <button onclick="toggleTheme()" class="icon">🌙</button>
+        <a class="icon profileIcon" href="profile.html">👤</a>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <section class="section">
+      <h1>Personal information</h1>
+
+      <div class="profileCard animate">
+
+        <!-- Avatar -->
+        <div class="avatarWrap">
+  <div class="avatar" id="profileAvatar">👤</div>
+  <button class="avatarEditBtn" type="button" id="openAvatarModal">✎</button>
+</div>
+
+        <h2 style="text-align:center">Profile Info</h2>
+
+        <!-- Names -->
+        <div class="row">
+          <div class="field">
+            <label>First name</label>
+            <input id="firstName" name="first_name" type="text" placeholder="First Name">
+          </div>
+
+          <div class="field">
+            <label>Last name</label>
+            <input id="lastName" name="last_name" type="text" placeholder="Last Name">
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+          <label>Email</label>
+          <input id="email" name="email" type="email" placeholder="Email" readonly>
+        </div>
+
+
+        <!-- Joining date -->
+        <div class="field">
+          <label>Joining date</label>
+          <input id="joinDate" type="text" readonly>
+        </div>
+
+        <!-- Save button -->
+        <button class="btn" id="saveProfileBtn">Save Changes</button>
+
+        <!-- Message -->
+        <p id="profileMessage" class="mini"></p>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <h3 class="footer-logo logo-switch">
+  <img src="images/black-logo.png" alt="Dir Logo" class="logo-light">
+  <img src="images/white-logo.png" alt="Dir Logo" class="logo-dark">
+</h3>
+      <div class="social">○ □ △ ×</div>
+            <p class="mini">
+  <a href="about.html">About Us</a>
+</p>
+    </footer>
+
+  </main>
+
+  <div id="avatarModal" class="confirmModal">
+  <div class="confirmBox avatarBox">
+    <h2>Choose Avatar</h2>
+
+    <div class="avatarOptions">
+      <button class="avatarOption" data-avatar="default">👤</button>
+      <button class="avatarOption" data-avatar="cat">🐱</button>
+      <button class="avatarOption" data-avatar="lion">🦁</button>
+      <button class="avatarOption" data-avatar="rabbit">🐰</button>
+      <button class="avatarOption" data-avatar="owl">🦉</button>
+      <button class="avatarOption" data-avatar="duck">🦆</button>
+      <button class="avatarOption" data-avatar="turtle">🐢</button>
+      <button class="avatarOption" data-avatar="bear">🐻</button>
+    </div>
+
+    <div class="confirmActions">
+      <button class="btn" id="closeAvatarModal" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+  <script src="js/common.js"></script>
+  <script src="js/profile.js"></script>
+
+</body>
+
+</html>

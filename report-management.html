@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Report Management | DIR'A</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+  <main class="page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <nav class="nav">
+
+      <a href="government-dashboard.html" class="logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </a>
+
+
+      <div class="links">
+
+        <a href="government-dashboard.html">
+          Home
+        </a>
+
+        <a href="games.html">
+          Games
+        </a>
+
+        <a href="tracked-games.html">
+          My List
+        </a>
+
+        <a class="btn" href="main-home.html">
+          Log Out
+        </a>
+
+        <button
+          onclick="toggleTheme()"
+          class="icon">
+          🌙
+        </button>
+
+        <a
+          class="icon profileIcon"
+          href="profile.html">
+          👤
+        </a>
+
+      </div>
+
+    </nav>
+
+
+
+    <!-- =========================
+         PAGE TITLE
+    ========================== -->
+
+    <section class="section">
+
+      <p class="mini">
+        REPORT MANAGEMENT
+      </p>
+
+      <h1 id="reportGameName">
+        Loading...
+      </h1>
+
+      <p class="mini">
+        Submitted reports for this game
+      </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         REPORTS TABLE
+    ========================== -->
+
+    <section class="section">
+
+      <div class="tableWrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Report Title
+              </th>
+
+              <th>
+                Behavior
+              </th>
+
+              <th>
+                Seriousness
+              </th>
+
+              <th>
+                Detected At
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="reportsManagementTable">
+
+            <tr>
+
+              <td colspan="4">
+                Loading reports...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+      <h3 class="footer-logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </h3>
+
+      <div class="social">
+        ○ □ △ ×
+      </div>
+
+      <p class="mini">
+
+        <a href="about.html">
+          About Us
+        </a>
+
+      </p>
+
+    </footer>
+
+
+  </main>
+
+
+  <script src="js/common.js"></script>
+<script src="js/report-management.js"></script>
+</body>
+
+</html>

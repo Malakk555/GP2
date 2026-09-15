@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Game Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="page">
+
+    <nav class="nav">
+      <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+      <div class="links">
+        <a href="home.html">Home</a>
+        <a href="games.html">Games</a>
+        <a href="my-reports.html">Reports</a>
+        <a href="tracked-games.html">My List</a>
+        <a class="btn" href="main-home.html">Log Out</a>
+        <button onclick="toggleTheme()" class="icon">🌙</button>
+        <a class="icon profileIcon" href="profile.html">👤</a>
+      </div>
+    </nav>
+
+    <section class="section">
+      <h1>Game Overview</h1>
+
+      <div class="detailTop animate">
+        <div class="game-hero-thumb">
+  <img id="gameImage" src="" alt="Game image">
+</div>
+
+        <h2 id="gameName">Game Name</h2>
+
+        <p>
+          <b>Description:</b>
+          <span id="gameDescription">
+            AI-analyzed gaming community risk report based on public reviews and player interactions.
+          </span>
+        </p>
+
+        <div class="tags" id="gameGenres">
+          <span class="tag">Genre</span>
+        </div>
+
+        <br>
+
+        <div class="detailActions">
+          <button class="btn" onclick="trackGame()">Track</button>
+         <a class="btn" id="saferAlternativeBtn" href="#">
+  Safer Alternative
+</a> 
+         <button class="btn" onclick="openReportModal()">Report</button>
+        </div>
+      </div>
+
+      <br>
+
+      <p id="noAnalysisMessage" class="mini" style="display:none;">
+  This game is still new and does not have enough comments for risk analysis yet.
+</p>
+      <div class="detailMetrics">
+        <div class="metric animate">
+          <h2>Overall Risk Assessment</h2>
+
+          <div class="gauge-circle" id="overallGauge">
+              <span id="overallRiskPercent">0%</span>
+          </div>
+
+          
+          <p>Risk Level <b style="float:right" id="overallRiskLevel">Low</b></p>
+          <p>Last Updated <b style="float:right" id="lastUpdated">Today</b></p>
+        </div>
+
+        <div class="metric animate">
+          <h2>Risk Breakdown</h2>
+
+          <p>Bullying <span id="bullyingPercent">0%</span></p>
+          <div class="bar"><i id="bullyingBar" style="width:0%"></i></div>
+
+          <p>Sexual Harassment <span id="sexualPercent">0%</span></p>
+          <div class="bar"><i id="sexualBar" style="width:0%"></i></div>
+
+          <p>Threat <span id="threatPercent">0%</span></p>
+          <div class="bar"><i id="threatBar" style="width:0%"></i></div>
+
+          <p>Hate Speech <span id="hatePercent">0%</span></p>
+          <div class="bar"><i id="hateBar" style="width:0%"></i></div>
+
+          <p>Other Toxicity <span id="otherPercent">0%</span></p>
+          <div class="bar"><i id="otherBar" style="width:0%"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="reportModal" class="reportModal">
+      <div class="reportBox">
+        <button class="closeBtn" onclick="closeReportModal()">×</button>
+
+        <h2>Submit Report</h2>
+
+        <div class="reportInfo">
+          <p><b>Game:</b> <span id="reportGameName">Game Name</span></p>
+          <p><b>Overall Risk:</b> <span id="reportRiskPercent">0%</span></p>
+          <p><b>Risk Level:</b> <span id="reportRiskLevel">Low</span></p>
+        </div>
+
+        <form id="reportForm">
+          <input type="hidden" id="reportGameId" name="game_id">
+
+          <div class="field">
+            <label>Report Title</label>
+            <input type="text" name="title" required placeholder="Example: Offensive Language">
+          </div>
+
+          <div class="checklist">
+            <h3>Checklist</h3>
+
+            <p><b>1. What kind of behavior did you observe?</b></p>
+
+            <label>
+              <input type="checkbox" name="behavior_toxic" value="1">
+              Offensive / toxic language
+            </label>
+
+            <label>
+              <input type="checkbox" name="behavior_bullying" value="1">
+              Bullying
+            </label>
+
+            <label>
+              <input type="checkbox" name="behavior_hate" value="1">
+              Hate speech
+            </label>
+
+            <label>
+              <input type="checkbox" name="behavior_sexual" value="1">
+              Sexual content
+            </label>
+
+            <label>
+              <input type="checkbox" name="behavior_threat" value="1">
+              Threats
+            </label>
+
+            <label>
+              <input type="checkbox" id="behaviorOtherCheck" name="has_behavior_other" value="1">
+              Other
+            </label>
+
+           <textarea 
+  id="behaviorOtherText"
+  name="behavior_other"
+  placeholder="Describe what happened..."
+  class="report-textarea">
+</textarea>
+
+            <br>
+
+            <p><b>2. How serious is it?</b></p>
+
+            <label>
+              <input type="radio" name="severity" value="low" required>
+              Low
+            </label>
+
+            <label>
+              <input type="radio" name="severity" value="medium">
+              Medium
+            </label>
+
+            <label>
+              <input type="radio" name="severity" value="high">
+              High
+            </label>
+
+            <br>
+
+            <p><b>3. Where did it happen?</b></p>
+
+            <label>
+              <input type="checkbox" name="location_chat" value="1">
+              Chat
+            </label>
+
+            <label>
+              <input type="checkbox" name="location_gameplay" value="1">
+              Gameplay
+            </label>
+
+            <label>
+              <input type="checkbox" name="location_community" value="1">
+              Community
+            </label>
+          </div>
+
+          <button type="submit" class="btn">Submit Report</button>
+          <p id="reportMessage" class="mini"></p>
+        </form>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <h3 class="footer-logo logo-switch">
+  <img src="images/black-logo.png" alt="Dir Logo" class="logo-light">
+  <img src="images/white-logo.png" alt="Dir Logo" class="logo-dark">
+</h3>
+      <div class="social">○ □ △ ×</div>
+            <p class="mini">
+  <a href="about.html">About Us</a>
+</p>
+    </footer>
+
+  </main>
+
+<div id="toast" class="toast"></div>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/game-details.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,491 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Government Dashboard | DIR'A</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+  <main class="page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <nav class="nav">
+
+      <a
+        href="government-dashboard.html"
+        class="logo logo-switch"
+      >
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </a>
+
+
+      <div class="links">
+
+        <a
+          class="active"
+          href="government-dashboard.html"
+        >
+          Home
+        </a>
+
+
+        <a href="games.html">
+          Games
+        </a>
+
+
+        <a href="tracked-games.html">
+          My List
+        </a>
+
+
+        <a
+          class="btn"
+          href="main-home.html"
+        >
+          Log Out
+        </a>
+
+
+        <button
+          onclick="toggleTheme()"
+          class="icon"
+        >
+          🌙
+        </button>
+
+
+        <a
+          class="icon profileIcon"
+          href="profile.html"
+        >
+          👤
+        </a>
+
+      </div>
+
+    </nav>
+
+
+
+    <!-- =========================================
+         DASHBOARD TITLE
+    ========================================== -->
+
+    <section class="section">
+
+      <h1>
+        Government Dashboard
+      </h1>
+
+      <p class="mini">
+        Overview of game complaints and risk levels
+      </p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         SUMMARY CARDS
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="grid3">
+
+
+        <!-- Total Complaints -->
+
+        <div class="dashBox">
+
+          <span class="pill">
+            Total Complaints
+          </span>
+
+          <h2>
+            <span id="totalReports">0</span>
+            📝
+          </h2>
+
+          <p class="mini">
+            Complaints submitted across all games
+          </p>
+
+        </div>
+
+
+
+        <!-- Total Games -->
+
+        <div class="dashBox">
+
+          <span class="pill">
+            Total Games
+          </span>
+
+          <h2>
+            <span id="totalReportedGames">0</span>
+            🎮
+          </h2>
+
+          <p class="mini">
+            Games with submitted complaints
+          </p>
+
+        </div>
+
+
+
+        <!-- High Risk -->
+
+        <div class="dashBox">
+
+          <span class="pill">
+            High Risk
+          </span>
+
+          <h2>
+            <span id="highRiskGames">0</span>
+            ⚠️
+          </h2>
+
+          <p class="mini">
+            Games currently classified as high risk
+          </p>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         COMPLAINTS + GAME ANALYSIS
+    ========================================== -->
+
+    <section class="section">
+
+
+      <!-- Section Header -->
+
+      <div class="complaints-section-header">
+
+        <div>
+
+          <h2 id="tableSectionTitle">
+            Games with Complaints
+          </h2>
+
+          <p
+            class="mini"
+            id="tableSectionDescription"
+          >
+            View games with submitted complaints and review their details.
+          </p>
+
+        </div>
+
+
+        <button
+          id="backToGamesBtn"
+          class="back-to-games-btn"
+          type="button"
+          hidden
+        >
+          ← Back to Games
+        </button>
+
+      </div>
+
+
+
+      <!-- Table + Analysis Layout -->
+
+      <div class="government-analysis-layout">
+
+
+        <!-- =========================================
+             GAMES / COMPLAINTS TABLE
+        ========================================== -->
+
+        <div class="government-games-table">
+
+          <div class="tableWrap">
+
+            <table>
+
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    Game
+                  </th>
+
+                  <th>
+                    Complaints
+                  </th>
+
+                  <th>
+                    Overall Risk
+                  </th>
+
+                  <th>
+                    Risk Level
+                  </th>
+
+                </tr>
+
+              </thead>
+
+
+
+              <tbody id="reportedGamesTable">
+
+                <tr>
+
+                  <td colspan="4">
+                    Loading games with complaints...
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             GAME ANALYSIS
+        ========================================== -->
+
+        <aside
+          id="gameAnalysisPanel"
+          class="game-analysis-panel"
+        >
+
+          <div class="game-panel-content">
+
+
+            <p class="mini">
+              GAME ANALYSIS
+            </p>
+
+
+            <img
+              id="panelGameImage"
+              class="game-panel-image"
+              src=""
+              alt="Game image"
+            >
+
+
+            <h2 id="panelGameName">
+              Select a Game
+            </h2>
+
+
+
+            <!-- Overall Risk -->
+
+            <div class="game-panel-risk">
+
+              <span
+                id="panelRiskLevel"
+                class="risk-badge"
+              >
+                -
+              </span>
+
+
+              <strong id="panelOverallRisk">
+                0%
+              </strong>
+
+            </div>
+
+
+
+            <hr>
+
+
+
+            <!-- Risk Breakdown -->
+
+            <h3>
+              Risk Category Breakdown
+            </h3>
+
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Threat
+              </span>
+
+              <strong id="panelThreat">
+                0%
+              </strong>
+
+            </div>
+
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Bullying
+              </span>
+
+              <strong id="panelBullying">
+                0%
+              </strong>
+
+            </div>
+
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Sexual Harassment
+              </span>
+
+              <strong id="panelSexualHarassment">
+                0%
+              </strong>
+
+            </div>
+
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Hate Speech
+              </span>
+
+              <strong id="panelHateSpeech">
+                0%
+              </strong>
+
+            </div>
+
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Other Toxicity
+              </span>
+
+              <strong id="panelOtherToxicity">
+                0%
+              </strong>
+
+            </div>
+
+
+          </div>
+
+        </aside>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="footer">
+
+
+      <h3 class="footer-logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </h3>
+
+
+      <div class="social">
+        ○ □ △ ×
+      </div>
+
+
+      <p class="mini">
+
+        <a href="about.html">
+          About Us
+        </a>
+
+      </p>
+
+
+    </footer>
+
+
+  </main>
+
+
+
+  <!-- =========================================
+       SCRIPTS
+  ========================================== -->
+
+  <script src="js/common.js"></script>
+
+  <script src="js/government-dashboard.js"></script>
+
+
+</body>
+
+</html>
