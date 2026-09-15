@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Log In | DIR’A</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="guardian.css">
+
+</head>
+
+
+<body class="authPage authLoginPage">
+
+
+  <!-- BACKGROUND -->
+  <div class="authBackdrop" aria-hidden="true">
+
+    <div class="authGlow authGlowOne"></div>
+
+    <div class="authGlow authGlowTwo"></div>
+
+    <div class="authGrid"></div>
+
+  </div>
+
+
+
+  <main class="authShell">
+
+
+    <!-- NAV -->
+    <nav class="authNav">
+
+      <a
+        href="main-home.html"
+        class="logo logo-switch authLogo"
+        aria-label="DIR’A home"
+      >
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR’A"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR’A"
+        >
+
+      </a>
+
+
+      <div class="authNavActions">
+
+        <button
+          onclick="toggleTheme()"
+          class="icon authTheme"
+          aria-label="Switch theme"
+        >
+          🌙
+        </button>
+
+      </div>
+
+    </nav>
+
+
+
+    <!-- LOGIN -->
+    <section class="authStage authStageLogin">
+
+
+      <div class="authContent authLoginContent">
+
+
+        <h1 class="authTitle">
+          Welcome<br>
+          <em>back.</em>
+        </h1>
+
+
+        <p class="authLead">
+          Log in to continue exploring games,
+          safety insights and your DIR’A space.
+        </p>
+
+
+
+        <form
+          id="loginForm"
+          class="authForm authLoginForm"
+          autocomplete="on"
+        >
+
+
+          <div
+            id="loginMessage"
+            class="formMessage authMessage"
+            hidden
+          ></div>
+
+
+
+          <div class="field">
+
+            <label for="loginEmail">
+              Email
+            </label>
+
+            <input
+              id="loginEmail"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              required
+            >
+
+          </div>
+
+
+
+          <div class="field">
+
+
+            <div class="authLabelRow">
+
+              <label for="loginPassword">
+                Password
+              </label>
+
+
+              <a href="#">
+                Forgot password?
+              </a>
+
+            </div>
+
+
+            <input
+              id="loginPassword"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              required
+            >
+
+          </div>
+
+
+
+          <button
+            id="loginBtn"
+            class="btn light authSubmit"
+            type="submit"
+          >
+
+            Log In
+
+            <span>
+              →
+            </span>
+
+          </button>
+
+
+          <p class="authSwitchText">
+            New to DIR’A?
+            <a href="signup.html">
+              Create your account
+            </a>
+          </p>
+
+
+        </form>
+
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- DIR'A GUARDIAN -->
+  <div
+    id="dirGuardian"
+    class="dir-guardian auth-dir-guardian"
+    aria-hidden="true"
+  >
+
+    <div
+      class="guardian-symbol"
+      id="guardianSymbol"
+    ></div>
+
+
+    <div class="guardian-body-wrap">
+
+      <div class="guardian-shadow"></div>
+
+      <div class="guardian-neck"></div>
+
+
+      <div class="guardian-head-wrap">
+
+        <div class="guardian-head">
+
+          <div class="guardian-ear guardian-ear-left"></div>
+
+          <div class="guardian-ear guardian-ear-right"></div>
+
+
+          <div class="guardian-face">
+
+            <span class="guardian-eye guardian-eye-left"></span>
+
+            <span class="guardian-eye guardian-eye-right"></span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="guardian-body"></div>
+
+      <div class="guardian-arm guardian-arm-left"></div>
+
+      <div class="guardian-arm guardian-arm-right"></div>
+
+    </div>
+
+  </div>
+
+
+
+  <script src="js/common.js"></script>
+
+  <script src="js/guardian.js"></script>
+
+  <script src="js/login.js"></script>
+
+</body>
+
+</html>

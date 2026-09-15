@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="page">
+
+    <nav class="nav">
+      <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+      <div class="links">
+        <a class="active" href="home.html">Home</a>
+        <a href="games.html">Games</a>
+        <a href="my-reports.html">Reports</a>
+        <a href="tracked-games.html">My List</a>
+        <a class="btn" href="main-home.html">Log Out</a>
+        <button onclick="toggleTheme()" class="icon">🌙</button>
+        <a class="icon profileIcon" href="profile.html">👤</a>
+      </div>
+    </nav>
+
+    <section class="hero dashHero homeHero animate">
+  <div class="heroContent">
+    <h1 id="welcomeName">Hello!</h1>
+    <div class="search">
+      <input id="homeSearch" placeholder="Search 🔍">
+    </div>
+  </div>
+
+  <div class="homeHeroImage">
+    <img src="images/hero-dark.gif" alt="Gaming hero animation">
+  </div>
+</section>
+
+    <section class="section">
+      <h2>DashBoard</h2>
+
+      <div class="dashStats">
+        <div class="dashBox">
+          <span class="pill">Tracked Games</span>
+          <h2><span id="trackedCount">0</span> 🎮</h2>
+          <p class="mini">Number of games you followed</p>
+        </div>
+
+        <div class="dashBox">
+          <span class="pill">Active Alerts</span>
+          <h2><span id="alertsCount">0</span> 🚨</h2>
+          <p class="mini">Number of high-risk games</p>
+        </div>
+
+        <div class="dashBox">
+          <span class="pill">Reports Under Review</span>
+          <h2><span id="reportsReviewCount">0</span> 📊</h2>
+          <p class="mini">Number of reports in review</p>
+        </div>
+
+        <div class="dashBox">
+  <span class="pill">Submitted Reports</span>
+  <h2><span id="submittedReportsCount">0</span> 📝</h2>
+  <p class="mini">Number of reports you submitted</p>
+</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Recent Games</h2>
+      <div class="marquee-wrap">
+  <div class="cards marquee-track" id="recentGames"></div>
+</div>
+    </section>
+
+    <footer class="footer">
+      <h3 class="footer-logo logo-switch">
+  <img src="images/black-logo.png" alt="Dir Logo" class="logo-light">
+  <img src="images/white-logo.png" alt="Dir Logo" class="logo-dark">
+</h3>
+      <div class="social">○ □ △ ×</div>
+            <p class="mini">
+  <a href="about.html">About Us</a>
+</p>
+    </footer>
+
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/home.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Complaints Management | DIR'A Admin</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+  <main class="page">
+
+
+    <!-- =========================
+         NAV
+    ========================== -->
+
+    <nav class="nav">
+
+      <a href="admin-dashboard.html" class="logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </a>
+
+
+      <div class="links">
+
+        <a href="admin-dashboard.html">
+          Dashboard
+        </a>
+
+        <a href="admin-games.html">
+          Games
+        </a>
+
+        <a href="admin-users.html">
+          Users
+        </a>
+
+        <a
+          href="admin-complaints.html"
+          class="active"
+        >
+          Complaints
+        </a>
+
+        <a href="admin-settings.html">
+          Settings
+        </a>
+
+        <a
+          class="btn"
+          href="main-home.html"
+        >
+          Log Out
+        </a>
+
+        <button
+          onclick="toggleTheme()"
+          class="icon"
+          type="button"
+        >
+          🌙
+        </button>
+
+      </div>
+
+    </nav>
+
+
+
+    <!-- =========================
+         TITLE
+    ========================== -->
+
+    <section class="section">
+
+      <p class="mini">
+        ADMIN / COMPLAINTS
+      </p>
+
+      <h1>
+        Complaints Management
+      </h1>
+
+      <p class="mini">
+        Review and manage complaints submitted by users.
+      </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         SEARCH
+    ========================== -->
+
+    <section class="section">
+
+      <div class="toolbar">
+
+        <div class="search">
+
+          <input
+            type="text"
+            id="complaintSearch"
+            placeholder="Search complaint, game or user..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TABLE
+    ========================== -->
+
+    <section class="section">
+
+      <div class="admin-section-heading">
+
+        <div>
+
+          <h2>
+            Submitted Complaints
+          </h2>
+
+          <p class="mini">
+            Complaints currently stored in the DIR'A platform.
+          </p>
+
+        </div>
+
+
+        <span
+          class="pill"
+          id="complaintsCount"
+        >
+          0 Complaints
+        </span>
+
+      </div>
+
+
+      <div class="tableWrap admin-reports-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Complaint</th>
+
+              <th>Game</th>
+
+              <th>User</th>
+
+              <th>Behavior</th>
+
+              <th>Severity</th>
+
+              <th>Date</th>
+
+              <th>Actions</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="complaintsTable">
+
+            <tr>
+
+              <td colspan="7">
+                Loading complaints...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         VIEW MODAL
+    ========================== -->
+
+    <div
+      id="complaintModal"
+      class="admin-game-modal"
+    >
+
+      <div class="admin-game-modal-box">
+
+        <button
+          id="closeComplaintModal"
+          class="admin-modal-close"
+          type="button"
+        >
+          ×
+        </button>
+
+
+        <p class="mini">
+          COMPLAINT DETAILS
+        </p>
+
+        <h2 id="modalComplaintTitle">
+          Complaint
+        </h2>
+
+
+        <div class="complaint-details-grid">
+
+          <div>
+            <span>Game</span>
+            <strong id="modalGame"></strong>
+          </div>
+
+          <div>
+            <span>User</span>
+            <strong id="modalUser"></strong>
+          </div>
+
+          <div>
+            <span>Email</span>
+            <strong id="modalEmail"></strong>
+          </div>
+
+          <div>
+            <span>Status</span>
+            <strong id="modalStatus"></strong>
+          </div>
+
+          <div>
+            <span>Behavior</span>
+            <strong id="modalBehavior"></strong>
+          </div>
+
+          <div>
+            <span>Severity</span>
+            <strong id="modalSeverity"></strong>
+          </div>
+
+          <div>
+            <span>Observed At</span>
+            <strong id="modalLocation"></strong>
+          </div>
+
+          <div>
+            <span>Date</span>
+            <strong id="modalDate"></strong>
+          </div>
+
+        </div>
+
+
+        <div
+          id="otherBehaviorBox"
+          class="complaint-other-box"
+          hidden
+        >
+
+          <span>
+            Other Details
+          </span>
+
+          <p id="modalOther"></p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+      <h3 class="footer-logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </h3>
+
+      <p class="mini">
+        DIR'A Administration
+      </p>
+
+    </footer>
+
+
+  </main>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/admin-complaints.js"></script>
+
+</body>
+
+</html>
