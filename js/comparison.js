@@ -2,6 +2,101 @@ console.log("Comparison ready");
 
 let gamesData = [];
 
+async function loadComparisonGames() {
+  try {
+    const response = await fetch("api/games.php");
+    const data = await response.json();
+
+    console.log("Games API:", data);
+
+    if (!data.success) {
+      document.getElementById("compareMessage").textContent =
+        data.message || "Cannot load games.";
+      return;
+    }
+
+    gamesData = data.games || [];
+    setupAutocomplete("gameOneSearch", "gameOneSuggestions", "gameOne");
+    setupAutocomplete("gameTwoSearch", "gameTwoSuggestions", "gameTwo");
+
+  } catch (error) {
+    console.error("Comparison load error:", error);
+    document.getElementById("compareMessage").textContent = "Cannot load games.";
+  }
+}
+
+function setupAutocomplete(inputId, suggestionsId, hiddenId) {
+  const input = document.getElementById(inputId);
+  const suggestions = document.getElementById(suggestionsId);
+  const hidden = document.getElementById(hiddenId);
+
+  input.addEventListener("input", () => {
+    const value = input.value.toLowerCase().trim();
+    hidden.value = "";
+
+    if (value.length < 1) {
+      suggestions.innerHTML = "";
+      suggestions.style.display = "none";
+      return;
+    }
+
+    const matches = gamesData.filter(game =>
+      game.game_name &&
+      game.game_name.toLowerCase().startsWith(value)
+    );
+
+    if (matches.length === 0) {
+      suggestions.innerHTML = `<div class="suggestion-item">No games found</div>`;
+      suggestions.style.display = "block";
+      return;
+    }
+
+    suggestions.innerHTML = matches.map(game => `
+      <div class="suggestion-item" data-id="${game.game_id}" data-name="${game.game_name}">
+        ${game.game_name}
+      </div>
+    `).join("");
+
+    suggestions.style.display = "block";
+  });
+
+  suggestions.addEventListener("click", (event) => {
+    const item = event.target.closest(".suggestion-item");
+
+    if (!item || !item.dataset.id) return;
+
+    input.value = item.dataset.name;
+    hidden.value = item.dataset.id;
+
+    suggestions.innerHTML = "";
+    suggestions.style.display = "none";
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!input.contains(event.target) && !suggestions.contains(event.target)) {
+      suggestions.style.display = "none";
+    }
+  });
+}
+
+function getGameById(id) {
+  return gamesData.find(game => String(game.game_id) === String(id));
+}
+
+function getRiskValue(game) {
+  return Number(game.overall_risk_percent || 0);
+}
+
+function setRiskLevelPill(elementId, level) {
+  const pill = document.getElementById(elementId);
+  if (!pill) return;
+
+  const riskLevel = level || "Low";
+
+  pill.textContent = riskLevel;
+  pill.className = `pill risk-${riskLevel.toLowerCase()}`;
+}
+
 const labelWeights = {
   sexual_harassment: 0.266,
   hate_speech: 0.201,
@@ -9,107 +104,6 @@ const labelWeights = {
   threat: 0.182,
   other_toxicity: 0.156
 };
-
-
-async function loadComparisonGames() {
-  try {
-    const response = await fetch("api/games.php");
-    const data = await response.json();
-
-    if (!data.success) {
-      showMessage(data.message || "Cannot load games.");
-      return;
-    }
-
-    gamesData = data.games || [];
-
-    const params = new URLSearchParams(window.location.search);
-    const gamesParam = params.get("games");
-
-    if (!gamesParam) {
-      showMessage("No games were selected.");
-      return;
-    }
-
-    const selectedIds = gamesParam
-      .split(",")
-      .map(id => id.trim())
-      .filter(Boolean);
-
-    if (selectedIds.length < 2 || selectedIds.length > 6) {
-      showMessage("Please select between 2 and 6 games.");
-      return;
-    }
-
-    const selectedGames = selectedIds
-      .map(id => getGameById(id))
-      .filter(Boolean);
-
-    if (selectedGames.length !== selectedIds.length) {
-      showMessage("Some selected games could not be found.");
-      return;
-    }
-
-    const unavailableGames = selectedGames.filter(
-  game => game.analysis_status === "no_comments"
-);
-
-const comparableGames = selectedGames.filter(
-  game => game.analysis_status !== "no_comments"
-);
-
-if (comparableGames.length < 2) {
-  showMessage(
-    "At least two analyzed games are required to start a comparison."
-  );
-  return;
-}
-
-if (unavailableGames.length > 0) {
-  const names = unavailableGames
-    .map(game => game.game_name)
-    .join(", ");
-
-  document.getElementById("compareMessage").textContent =
-    `${names} ${
-      unavailableGames.length === 1 ? "was" : "were"
-    } excluded from the comparison because ${
-      unavailableGames.length === 1 ? "it does" : "they do"
-    } not have enough comments yet.`;
-}
-
-displayGameComparison(comparableGames);
-
-
-  } catch (error) {
-    console.error("Comparison load error:", error);
-    showMessage("Cannot load games.");
-  }
-}
-
-
-function showMessage(message) {
-  const messageElement = document.getElementById("compareMessage");
-
-  if (messageElement) {
-    messageElement.textContent = message;
-  }
-
-  document.getElementById("comparisonResult").style.display = "none";
-}
-
-
-function getGameById(id) {
-  return gamesData.find(
-    game => String(game.game_id) === String(id)
-  );
-}
-
-
-function getRiskValue(game) {
-  return Number(game.overall_risk_percent || 0);
-}
-
 
 function weightedLabelPercent(count, total, label) {
   count = Number(count || 0);
@@ -123,248 +117,109 @@ function weightedLabelPercent(count, total, label) {
   return Number(weightedPercent.toFixed(2));
 }
 
+function compareGames() {
+  const gameOneId = document.getElementById("gameOne").value;
+  const gameTwoId = document.getElementById("gameTwo").value;
+  const message = document.getElementById("compareMessage");
 
-function displayGameComparison(selectedGames) {
-  const comparisonResult =
-    document.getElementById("comparisonResult");
+  if (!gameOneId || !gameTwoId) {
+    message.textContent = "Please select two games to compare.";
+    return;
+  }
 
-  const comparisonGrid =
-    document.getElementById("comparisonGrid");
+  if (gameOneId === gameTwoId) {
+    message.textContent = "Please select two different games.";
+    return;
+  }
 
-    comparisonGrid.className = "comparisonGrid";
+  const gameOne = getGameById(gameOneId);
+  const gameTwo = getGameById(gameTwoId);
 
-if (selectedGames.length === 3) {
-  comparisonGrid.classList.add("comparisonGrid--three");
-} else if (selectedGames.length >= 4) {
-  comparisonGrid.classList.add("comparisonGrid--many");
+  if (!gameOne || !gameTwo) {
+    message.textContent = "Game data is missing.";
+    return;
+  }
+
+  if (
+  gameOne.analysis_status === "no_comments" ||
+  gameTwo.analysis_status === "no_comments"
+) {
+  message.textContent =
+    "Comparison is not available because one of the selected games is still new and does not have enough comments yet.";
+
+  document.getElementById("comparisonResult").style.display = "none";
+
+  return;
 }
 
-  const message =
-    document.getElementById("compareMessage");
+  message.textContent = "";
+  document.getElementById("comparisonResult").style.display = "block";
 
+  const riskOne = getRiskValue(gameOne);
+  const riskTwo = getRiskValue(gameTwo);
 
-  comparisonResult.style.display = "block";
+  document.getElementById("gameOneName").textContent = gameOne.game_name;
+  document.getElementById("gameTwoName").textContent = gameTwo.game_name;
 
-  comparisonGrid.innerHTML = selectedGames
-    .map(game => createGameComparisonCard(game))
-    .join("");
+  setRiskLevelPill("gameOneRiskLevel", gameOne.overall_risk_level);
+  setRiskLevelPill("gameTwoRiskLevel", gameTwo.overall_risk_level);
 
-  document.getElementById("resultText").innerHTML =
-    createComparisonSummary(selectedGames);
+  document.getElementById("gameOneImage").src = gameOne.image_url || "";
+  document.getElementById("gameTwoImage").src = gameTwo.image_url || "";
+
+  document.getElementById("riskOne").textContent = riskOne + "%";
+  document.getElementById("riskTwo").textContent = riskTwo + "%";
+
+  setCircle("circleOne", riskOne);
+  setCircle("circleTwo", riskTwo);
+
+  document.getElementById("breakdownOne").innerHTML = createBreakdown(gameOne);
+  document.getElementById("breakdownTwo").innerHTML = createBreakdown(gameTwo);
+
+  const resultText = document.getElementById("resultText");
+
+    resultText.innerHTML = createComparisonSummary(gameOne, gameTwo);
 }
 
+function createComparisonSummary(gameOne, gameTwo) {
+  const riskOne = getRiskValue(gameOne);
+  const riskTwo = getRiskValue(gameTwo);
+  const difference = Math.abs(riskOne - riskTwo);
 
-function createGameComparisonCard(game) {
-  const riskValue = getRiskValue(game);
-
-  const riskLevel =
-    String(game.overall_risk_level || "Low").toLowerCase();
-
-  return `
-    <div class="compare-card">
-
-  <div class="compareImageWrap">
-
-    ${
-      game.image_url
-        ? `<img
-             class="thumb"
-             src="${game.image_url}"
-             alt="${game.game_name}"
-           >`
-        : `<div class="thumb placeholder"></div>`
-    }
-
-    <span class="pill risk-${riskLevel} compareLevelPill">
-      ${game.overall_risk_level || "Low"}
-    </span>
-
-  </div>
-
-      <h3>${game.game_name}</h3>
-
-      <p class="risk-label">Risk Score</p>
-
-      <div
-        class="risk-circle dynamic-risk-circle"
-        data-risk="${riskValue}"
-      >
-        <span>${riskValue}%</span>
-      </div>
-
-      <div class="toxicity-breakdown">
-        ${createBreakdown(game)}
-      </div>
-
-    </div>
-  `;
-}
-
-
-function createBreakdown(game) {
-  return `
-    ${createBar(
-      "Bullying",
-      weightedLabelPercent(
-        game.bullying,
-        game.comments_count,
-        "bullying"
-      )
-    )}
-
-    ${createBar(
-      "Sexual Harassment",
-      weightedLabelPercent(
-        game.sexual_harassment,
-        game.comments_count,
-        "sexual_harassment"
-      )
-    )}
-
-    ${createBar(
-      "Threat",
-      weightedLabelPercent(
-        game.threat,
-        game.comments_count,
-        "threat"
-      )
-    )}
-
-    ${createBar(
-      "Hate Speech",
-      weightedLabelPercent(
-        game.hate_speech,
-        game.comments_count,
-        "hate_speech"
-      )
-    )}
-
-    ${createBar(
-      "Other Toxicity",
-      weightedLabelPercent(
-        game.other_toxicity,
-        game.comments_count,
-        "other_toxicity"
-      )
-    )}
-  `;
-}
-
-
-function createBar(label, value) {
-  const percent = Number(value || 0);
-
-  return `
-    <div class="risk-row">
-      <strong>${label}</strong>
-
-      <small>${percent}%</small>
-
-      <div class="bar">
-        <span style="width:${percent}%"></span>
-      </div>
-    </div>
-  `;
-}
-
-
-function createComparisonSummary(selectedGames) {
-  const sortedGames = [...selectedGames].sort(
-    (a, b) => getRiskValue(b) - getRiskValue(a)
-  );
-
-  const highestGame = sortedGames[0];
-  const lowestGame = sortedGames[sortedGames.length - 1];
-
-  const highestRisk = getRiskValue(highestGame);
-  const lowestRisk = getRiskValue(lowestGame);
-
-  const difference = Number(
-    (highestRisk - lowestRisk).toFixed(2)
-  );
-
-  const topLabels = getTopToxicLabels(highestGame);
-
-  let summary = `
-    <strong>${highestGame.game_name}</strong>
-    has the highest overall risk score among the selected games
-    at <strong>${highestRisk}%</strong>.
-  `;
-
-  if (selectedGames.length > 2) {
-    summary += `
-      <strong>${lowestGame.game_name}</strong>
-      has the lowest overall risk score at
-      <strong>${lowestRisk}%</strong>.
+  if (riskOne === riskTwo) {
+    return `
+      <strong>${gameOne.game_name}</strong> and <strong>${gameTwo.game_name}</strong> have the same overall risk score.
+      The detected risk difference is relatively minor and no significantly dominant toxic behavior category was identified.
     `;
   }
 
-  if (difference <= 5) {
-    summary += `
-      Overall, the risk scores of the selected games are relatively close.
-    `;
-  } else {
-    summary += `
-      The difference between the highest and lowest risk scores
-      is <strong>${difference}%</strong>.
+  const higherGame = riskOne > riskTwo ? gameOne : gameTwo;
+  const lowerGame = riskOne > riskTwo ? gameTwo : gameOne;
+
+  const topLabels = getTopToxicLabels(higherGame);
+
+  if (difference <= 5 || topLabels.length === 0) {
+    return `
+      <strong>${higherGame.game_name}</strong> has a slightly higher overall risk score than <strong>${lowerGame.game_name}</strong>.
+      The detected risk difference is relatively minor and no significantly dominant toxic behavior category was identified.
     `;
   }
 
-  if (topLabels.length > 0) {
-    summary += `
-      The main toxicity indicators associated with
-      <strong>${highestGame.game_name}</strong>
-      are <strong>${formatLabels(topLabels)}</strong>.
-    `;
-  }
-
-  return summary;
+  return `
+    <strong>${higherGame.game_name}</strong> has a higher overall risk score than <strong>${lowerGame.game_name}</strong>.
+    The increase is mainly associated with higher <strong>${formatLabels(topLabels)}</strong> indicators detected in community discussions.
+    This may indicate a more negative interaction environment compared to the other game.
+  `;
 }
-
 
 function getTopToxicLabels(game) {
-  const labels = [
-    {
-      name: "bullying",
-      value: weightedLabelPercent(
-        game.bullying,
-        game.comments_count,
-        "bullying"
-      )
-    },
-    {
-      name: "sexual harassment",
-      value: weightedLabelPercent(
-        game.sexual_harassment,
-        game.comments_count,
-        "sexual_harassment"
-      )
-    },
-    {
-      name: "threat",
-      value: weightedLabelPercent(
-        game.threat,
-        game.comments_count,
-        "threat"
-      )
-    },
-    {
-      name: "hate speech",
-      value: weightedLabelPercent(
-        game.hate_speech,
-        game.comments_count,
-        "hate_speech"
-      )
-    },
-    {
-      name: "other toxicity",
-      value: weightedLabelPercent(
-        game.other_toxicity,
-        game.comments_count,
-        "other_toxicity"
-      )
-    }
-  ];
+ const labels = [
+  { name: "bullying", value: weightedLabelPercent(game.bullying, game.comments_count, "bullying") },
+  { name: "sexual harassment", value: weightedLabelPercent(game.sexual_harassment, game.comments_count, "sexual_harassment") },
+  { name: "threat", value: weightedLabelPercent(game.threat, game.comments_count, "threat") },
+  { name: "hate speech", value: weightedLabelPercent(game.hate_speech, game.comments_count, "hate_speech") },
+  { name: "other toxicity", value: weightedLabelPercent(game.other_toxicity, game.comments_count, "other_toxicity") }
+];
 
   return labels
     .filter(label => label.value > 0)
@@ -373,43 +228,57 @@ function getTopToxicLabels(game) {
     .map(label => label.name);
 }
 
-
 function formatLabels(labels) {
-  if (labels.length === 1) {
-    return labels[0];
-  }
-
+  if (labels.length === 1) return labels[0];
   return `${labels[0]} and ${labels[1]}`;
 }
 
+function setCircle(circleId, percentage) {
+  const circle = document.getElementById(circleId);
 
-function renderRiskCircles() {
   const styles = getComputedStyle(document.body);
+  const fill = styles.getPropertyValue("--compare-circle-fill").trim() || "#32C5D2";
+  const track = styles.getPropertyValue("--compare-circle-track").trim() || "#d9d9d9";
 
-  const fill =
-    styles.getPropertyValue("--compare-circle-fill").trim()
-    || "#32C5D2";
-
-  const track =
-    styles.getPropertyValue("--compare-circle-track").trim()
-    || "#d9d9d9";
-
-  document
-    .querySelectorAll(".dynamic-risk-circle")
-    .forEach(circle => {
-      const percentage =
-        Number(circle.dataset.risk || 0);
-
-      circle.style.background = `
-        conic-gradient(
-          ${fill} 0% ${percentage}%,
-          ${track} ${percentage}% 100%
-        )
-      `;
-    });
+  circle.style.background = `
+    conic-gradient(
+      ${fill} 0% ${percentage}%,
+      ${track} ${percentage}% 100%
+    )
+  `;
 }
 
+function createBreakdown(game) {
+  /*
+    ملاحظة:
+    جدول games اللي أرسلتيه ما فيه breakdown columns
+    لذلك مؤقتًا بنحط 0 إلى أن تربطونها من جدول آخر أو تضيفون الأعمدة.
+  */
+  return `
+  ${createBar("Bullying", weightedLabelPercent(game.bullying, game.comments_count, "bullying"))}
 
-loadComparisonGames().then(() => {
-  renderRiskCircles();
-});
+  ${createBar("Sexual Harassment", weightedLabelPercent(game.sexual_harassment, game.comments_count, "sexual_harassment"))}
+
+  ${createBar("Threat", weightedLabelPercent(game.threat, game.comments_count, "threat"))}
+
+  ${createBar("Hate Speech", weightedLabelPercent(game.hate_speech, game.comments_count, "hate_speech"))}
+
+  ${createBar("Other Toxicity", weightedLabelPercent(game.other_toxicity, game.comments_count, "other_toxicity"))}
+`;
+}
+
+function createBar(label, value) {
+  const percent = Number(value || 0);
+
+  return `
+    <div class="risk-row">
+      <strong>${label}</strong>
+      <small>${percent}%</small>
+      <div class="bar">
+        <span style="width:${percent}%"></span>
+      </div>
+    </div>
+  `;
+}
+
+loadComparisonGames();

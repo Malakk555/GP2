@@ -2,418 +2,68 @@ const signupForm = document.getElementById('signupForm');
 const signupMessage = document.getElementById('signupMessage');
 const signupBtn = document.getElementById('signupBtn');
 
-const accountTypeCards = document.querySelectorAll('.accountTypeCard');
-const signupFields = document.getElementById('signupFields');
-
-const accountTypeSection =
-  document.querySelector('.authAccountTypeSection');
-
-const changeRoleBtn =
-  document.getElementById('changeRoleBtn');
-
-const selectedRoleLabel =
-  document.getElementById('selectedRoleLabel');
-
-const emailLabel =
-  document.getElementById('emailLabel');
-
-const signupEmail =
-  document.getElementById('signupEmail');
-
-const employeeEmailHint =
-  document.getElementById('employeeEmailHint');
-
-let selectedRole = null;
-
-
-
 function showSignupMessage(text, type) {
-
   signupMessage.hidden = false;
-
   signupMessage.textContent = text;
-
-  signupMessage.className =
-    `formMessage authMessage ${type}`;
+  signupMessage.className = `formMessage ${type}`;
 }
 
+signupForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
 
-function revealFields(role) {
-
-  signupFields.hidden = false;
-
-
-  requestAnimationFrame(() => {
-
-    signupFields.classList.add('is-visible');
-
-  });
-
-
-  accountTypeSection.classList.add('role-selected');
-
-
-  selectedRoleLabel.textContent =
-    role === 'employee'
-      ? 'Employee account details'
-      : 'Individual account details';
-
-
-
-  if (role === 'employee') {
-
-    emailLabel.textContent = 'Work Email';
-
-    signupEmail.placeholder =
-      'Enter your organization email';
-
-    employeeEmailHint.hidden = false;
-
+  if (!firstName || !lastName || !email || !password) {
+    showSignupMessage('Please fill in all fields.', 'error');
+    return;
   }
 
-  else {
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-    emailLabel.textContent = 'Email';
-
-    signupEmail.placeholder =
-      'Enter your email';
-
-    employeeEmailHint.hidden = true;
-
-  }
-
-
-
-  setTimeout(() => {
-
-    signupFields.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest'
-    });
-
-  }, 160);
-
+if (!passwordRegex.test(password)) {
+  showSignupMessage(
+    'Password must be at least 8 characters and include both letters and numbers.',
+    'error'
+  );
+  return;
 }
 
+  try {
+    signupBtn.disabled = true;
+    signupBtn.textContent = 'Creating...';
 
-
-/* =========================
-   ACCOUNT TYPE
-========================= */
-
-accountTypeCards.forEach(card => {
-  card.addEventListener('click', () => {
-
-    selectedRole = card.dataset.role;
-
-    accountTypeCards.forEach(item => {
-      item.classList.remove('selected');
-    });
-
-    card.classList.add('selected');
-
-    signupFields.hidden = false;
-    signupMessage.hidden = true;
-
-    requestAnimationFrame(() => {
-      signupFields.classList.add('is-visible');
-    });
-
-    /* EMPLOYEE */
-    if (selectedRole === 'employee') {
-
-      emailLabel.textContent = 'Work email';
-
-      signupEmail.placeholder =
-        'Enter your organization email';
-
-      employeeEmailHint.textContent =
-        'Use the email address provided by your organization. Personal email addresses are not accepted.';
-
-      employeeEmailHint.hidden = false;
-
-    }
-
-    /* INDIVIDUAL */
-    else {
-
-      emailLabel.textContent = 'Email';
-
-      signupEmail.placeholder =
-        'Enter your email';
-
-      employeeEmailHint.hidden = true;
-
-    }
-
-    window.dispatchEvent(
-      new CustomEvent('dira:role-selected', {
-        detail: {
-          role: selectedRole
-        }
+    const response = await fetch('api/register.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password
       })
-    );
-
-  });
-});
-
-
-
-/* =========================
-   CHANGE ACCOUNT TYPE
-========================= */
-
-if (changeRoleBtn) {
-
-  changeRoleBtn.addEventListener('click', () => {
-
-
-    selectedRole = null;
-
-
-    accountTypeCards.forEach(item => {
-
-      item.classList.remove('selected');
-
     });
 
+    const result = await response.json();
 
-    signupFields.classList.remove('is-visible');
+    if (!response.ok || !result.success) {
+      showSignupMessage(result.message || 'Sign up failed. Please try again.', 'error');
+      return;
+    }
 
-
-    accountTypeSection.classList.remove(
-      'role-selected'
-    );
-
-
-    document.body.removeAttribute(
-      'data-auth-role'
-    );
-
+    localStorage.setItem('diraUser', JSON.stringify(result.user));
+    showSignupMessage('Account created successfully. Redirecting...', 'success');
 
 
     setTimeout(() => {
-
-      signupFields.hidden = true;
-
-
-      accountTypeSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-
-    }, 220);
-
-  });
-
-}
-
-
-
-/* =========================
-   SUBMIT SIGNUP
-========================= */
-
-signupForm.addEventListener(
-  'submit',
-  async (event) => {
-
-
-    event.preventDefault();
-
-
-
-    if (!selectedRole) {
-
-      showSignupMessage(
-        'Please choose an account type.',
-        'error'
-      );
-
-      return;
-
-    }
-
-
-
-    const firstName =
-      document
-        .getElementById('firstName')
-        .value
-        .trim();
-
-
-    const lastName =
-      document
-        .getElementById('lastName')
-        .value
-        .trim();
-
-
-    const email =
-      signupEmail.value.trim();
-
-
-    const password =
-      document
-        .getElementById('signupPassword')
-        .value;
-
-
-
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !password
-    ) {
-
-      showSignupMessage(
-        'Please fill in all fields.',
-        'error'
-      );
-
-      return;
-
-    }
-
-
-
-    const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-
-
-
-    if (!passwordRegex.test(password)) {
-
-      showSignupMessage(
-
-        'Password must be at least 8 characters and include both letters and numbers.',
-
-        'error'
-
-      );
-
-      return;
-
-    }
-
-
-
-    try {
-
-
-      signupBtn.disabled = true;
-
-      signupBtn.innerHTML =
-        'Creating...';
-
-
-
-      const response =
-        await fetch(
-          'api/register.php',
-          {
-
-            method: 'POST',
-
-            headers: {
-              'Content-Type':
-                'application/json'
-            },
-
-            body: JSON.stringify({
-
-              first_name: firstName,
-
-              last_name: lastName,
-
-              email,
-
-              password,
-
-              role: selectedRole
-
-            })
-
-          }
-        );
-
-
-
-      const result =
-        await response.json();
-
-
-
-      if (
-        !response.ok ||
-        !result.success
-      ) {
-
-        showSignupMessage(
-
-          result.message ||
-          'Sign up failed. Please try again.',
-
-          'error'
-
-        );
-
-        return;
-
-      }
-
-
-
-      localStorage.setItem(
-        'diraUser',
-        JSON.stringify(result.user)
-      );
-
-
-
-      showSignupMessage(
-        'Account created successfully. Redirecting...',
-        'success'
-      );
-
-
-
-      setTimeout(() => {
-
-        window.location.href =
-          'home.html';
-
-      }, 900);
-
-
-    }
-
-    catch (error) {
-
-
-      showSignupMessage(
-
-        'Cannot connect to the server. Make sure Apache and MySQL are running in XAMPP.',
-
-        'error'
-
-      );
-
-    }
-
-    finally {
-
-
-      signupBtn.disabled = false;
-
-
-      signupBtn.innerHTML =
-        'Create Account <span>→</span>';
-
-    }
-
+    window.location.href = 'home.html';
+    }, 900);
+  } catch (error) {
+    showSignupMessage('Cannot connect to the server. Make sure Apache and MySQL are running in XAMPP.', 'error');
+  } finally {
+    signupBtn.disabled = false;
+    signupBtn.textContent = 'Sign Up';
   }
-);
+});

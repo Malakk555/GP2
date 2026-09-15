@@ -30,21 +30,13 @@ const riskClass = isNew ? "new-pill" : `risk-${String(game.overall_risk_level ||
       
 
       <div class="cardActions">
-
-  <button
-    class="favoriteIconBtn favoriteIconBtn--selected"
-    type="button"
-    onclick="untrackGame(${game.game_id})"
-    title="Remove from My List"
-    aria-label="Remove ${game.game_name} from My List"
-  >
-    ♥
-  </button>
-
-  <a class="btn viewDetailsBtn" href="game-details.html?game_id=${game.game_id}">
+  <a class="btn" href="game-details.html?game_id=${game.game_id}">
     View Details
   </a>
 
+  <button class="btn" onclick="untrackGame(${game.game_id})">
+  Untrack
+</button>
 </div>
     </article>
   `;

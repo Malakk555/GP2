@@ -1,0 +1,372 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Users Management | DIR'A Admin</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main class="page">
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <nav class="nav">
+
+      <a
+        href="admin-dashboard.html"
+        class="logo logo-switch"
+      >
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </a>
+
+
+      <div class="links">
+
+        <a href="admin-dashboard.html">
+          Dashboard
+        </a>
+
+        <a href="admin-games.html">
+          Games
+        </a>
+
+        <a
+          class="active"
+          href="admin-users.html"
+        >
+          Users
+        </a>
+
+        <a href="admin-reports.html">
+          Reports
+        </a>
+
+        <a href="admin-settings.html">
+          Settings
+        </a>
+
+        <a
+          class="btn"
+          href="main-home.html"
+        >
+          Log Out
+        </a>
+
+        <button
+          onclick="toggleTheme()"
+          class="icon"
+          type="button"
+        >
+          🌙
+        </button>
+
+      </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         PAGE TITLE
+    ========================================== -->
+
+    <section class="section">
+
+      <p class="mini">
+        ADMIN / USERS
+      </p>
+
+      <h1>
+        Users Management
+      </h1>
+
+      <p class="mini">
+        Manage individual users, government employees and administrators.
+      </p>
+
+    </section>
+
+
+    <!-- =========================================
+         USER TYPE TABS
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="admin-user-tabs">
+
+        <button
+          class="admin-user-tab active"
+          type="button"
+          data-role="individual"
+        >
+          Individuals
+        </button>
+
+        <button
+          class="admin-user-tab"
+          type="button"
+          data-role="government"
+        >
+          Government Employees
+        </button>
+
+        <button
+          class="admin-user-tab"
+          type="button"
+          data-role="admin"
+        >
+          Admins
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SEARCH + FILTER
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="toolbar admin-users-toolbar">
+
+        <div class="search">
+
+          <input
+            type="text"
+            id="adminUserSearch"
+            placeholder="Search by name or email..."
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <select id="adminUserStatusFilter">
+
+          <option value="all">
+            All Statuses
+          </option>
+
+          <option value="active">
+            Active
+          </option>
+
+          <option value="pending">
+            Pending
+          </option>
+
+          <option value="disabled">
+            Disabled
+          </option>
+
+        </select>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SECTION TITLE
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="admin-section-heading">
+
+        <div>
+
+          <h2 id="adminUsersSectionTitle">
+            Individual Users
+          </h2>
+
+          <p
+            class="mini"
+            id="adminUsersSectionDescription"
+          >
+            Registered individual users on the DIR'A platform.
+          </p>
+
+        </div>
+
+
+        <span
+          class="pill"
+          id="adminUsersCount"
+        >
+          0 Users
+        </span>
+
+      </div>
+
+
+      <!-- =========================================
+           USERS TABLE
+      ========================================== -->
+
+      <div class="tableWrap admin-users-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                User
+              </th>
+
+              <th>
+                Email
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Joined
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="adminUsersTable">
+
+            <tr>
+
+              <td colspan="5">
+                Loading users...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="footer">
+
+      <h3 class="footer-logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </h3>
+
+      <p class="mini">
+        DIR'A Administration
+      </p>
+
+    </footer>
+
+  </main>
+
+<!-- =========================================
+     ACCOUNT STATUS CONFIRMATION
+========================================== -->
+
+<div
+  id="accountStatusModal"
+  class="confirmModal"
+>
+
+  <div class="confirmBox admin-account-confirm">
+
+    <h2 id="accountStatusTitle">
+      Update Account?
+    </h2>
+
+
+    <p class="mini">
+
+      Are you sure you want to
+      <strong id="accountStatusAction"></strong>
+
+      <strong id="accountStatusUserName"></strong>?
+
+    </p>
+
+
+    <p
+      class="mini"
+      id="accountStatusDescription"
+    ></p>
+
+
+    <div class="confirmActions">
+
+      <button
+        id="cancelAccountStatus"
+        class="admin-action-btn"
+        type="button"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        id="confirmAccountStatus"
+        class="btn"
+        type="button"
+      >
+        Confirm
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+  <script src="js/common.js"></script>
+  <script src="js/admin-users.js"></script>
+
+</body>
+
+</html>

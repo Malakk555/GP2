@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+      <div class="links">
+        <a href="main-home.html">Home</a>
+        <a href="about.html">About us</a>
+        <a class="btn" href="login.html">Sign in</a>
+        <a class="btn" href="signup.html">Register</a>
+        <button onclick="toggleTheme()" class="icon">🌙</button>
+      </div>
+    </nav>
+
+    <section class="split login">
+      <form id="loginForm" class="formPanel animate" autocomplete="on">
+        <h1>LOGIN</h1>
+        <div id="loginMessage" class="formMessage" hidden></div>
+
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" name="email" type="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" placeholder="Enter your password" required>
+        </div>
+
+        <p class="formSmall">
+  <a href="#">Forgot password?</a>
+</p>
+
+        <button id="loginBtn" class="btn light" type="submit">Log In</button>
+      </form>
+
+      <div class="darkPanel">
+        <div>
+          <h1>Hello Again!</h1>
+          <p>Please enter your details</p>
+          <a class="btn light" href="signup.html">Sign Up</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/login-role.js"></script>
+</body>
+</html>

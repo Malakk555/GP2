@@ -2,25 +2,15 @@ const grid = document.getElementById("gamesGrid");
 const searchInput = document.getElementById("gameSearch");
 const riskFilter = document.getElementById("riskFilter");
 const sortFilter = document.getElementById("sortFilter");
-const compareTray = document.getElementById("compareTray");
-const compareTrayGames = document.getElementById("compareTrayGames");
-const selectedCount = document.getElementById("selectedCount");
-const clearCompareBtn = document.getElementById("clearCompareBtn");
-const startComparisonBtn = document.getElementById("startComparisonBtn");
 
-let selectedGames = [];
 let currentGames = [];
-let trackedGames = [];
 
 function card(game) {
   const isNew = game.analysis_status === "no_comments";
   const riskClass = isNew ? "" : `risk-${String(game.overall_risk_level || "Low").toLowerCase()}`;
   
   return `
-    <article
-  class="card"
-  data-risk="${isNew ? "new" : String(game.overall_risk_level || "Low").toLowerCase()}"
->
+    <article class="card">
       <div class="top-pills">
         ${isNew ? "" : `<span class="pill">${game.overall_risk_percent ?? 0}% Risk</span>`}
         <span class="pill ${isNew ? "new-pill" : riskClass}">
@@ -48,67 +38,10 @@ function card(game) {
       <br>
 
       <div class="cardActions">
-
-  <div class="cardQuickActions">
-
-   <button
-  class="favoriteIconBtn ${
-    trackedGames.includes(String(game.game_id))
-      ? "favoriteIconBtn--selected"
-      : ""
-  }"
-  type="button"
-  data-id="${game.game_id}"
-  title="${
-    trackedGames.includes(String(game.game_id))
-      ? "Remove from My List"
-      : "Add to My List"
-  }"
-  aria-label="${
-    trackedGames.includes(String(game.game_id))
-      ? `Remove ${game.game_name} from My List`
-      : `Add ${game.game_name} to My List`
-  }"
->
-  ${
-    trackedGames.includes(String(game.game_id))
-      ? "♥"
-      : "♡"
-  }
-</button>
-
-    <button
-      class="compareIconBtn ${
-        selectedGames.includes(String(game.game_id))
-          ? "compareIconBtn--selected"
-          : ""
-      }"
-      type="button"
-      data-id="${game.game_id}"
-      title="${
-        selectedGames.includes(String(game.game_id))
-          ? "Remove from Compare"
-          : "Add to Compare"
-      }"
-      aria-label="${
-        selectedGames.includes(String(game.game_id))
-          ? "Remove from Compare"
-          : "Add to Compare"
-      }"
-    >
-      ⇄
-    </button>
-
-  </div>
-
-  <a
-    class="btn viewDetailsBtn"
-    href="game-details.html?game_id=${game.game_id}"
-  >
-    View Details
-  </a>
-
-</div>
+        <a class="btn" href="game-details.html?game_id=${game.game_id}">
+          View Details
+        </a>
+      </div>
     </article>
   `;
 }
@@ -120,163 +53,6 @@ function render(list) {
   }
 
   grid.innerHTML = list.map(card).join("");
-}
-
-function updateCompareTray() {
-  const selectedGameObjects = currentGames.filter(game =>
-    selectedGames.includes(String(game.game_id))
-  );
-
-  if (selectedGames.length === 0) {
-    selectedCount.textContent = "0 / 6 selected";
-  startComparisonBtn.disabled = true;
-  compareTrayGames.innerHTML = "";
-  compareTray.classList.remove("show");
-    return;
-  }
-
-  compareTray.classList.add("show");
-
-  selectedCount.textContent = `${selectedGames.length} / 6 selected`;
-
-  startComparisonBtn.disabled = selectedGames.length < 2;
-
-  compareTrayGames.innerHTML = selectedGameObjects
-    .map(game => `
-      <div class="compareTrayGame">
-        ${
-          game.image_url
-            ? `<img src="${game.image_url}" alt="${game.game_name}">`
-            : `<div class="compareTrayPlaceholder"></div>`
-        }
-
-        <span>${game.game_name}</span>
-
-        <button
-          class="removeCompareGame"
-          type="button"
-          data-id="${game.game_id}"
-          title="Remove from Compare"
-          aria-label="Remove ${game.game_name} from comparison"
-        >
-          ×
-        </button>
-      </div>
-    `)
-    .join("");
-}
-
-
-grid.addEventListener("click", (event) => {
-  const button = event.target.closest(".compareIconBtn");
-
-  if (!button) return;
-
-  const gameId = String(button.dataset.id);
-
-  if (selectedGames.includes(gameId)) {
-    selectedGames = selectedGames.filter(id => id !== gameId);
-  } else {
-    if (selectedGames.length >= 6) {
-      return;
-    }
-
-    selectedGames.push(gameId);
-  }
-
-  applyFilters();
-  updateCompareTray();
-});
-
-grid.addEventListener("click", async (event) => {
-  const favoriteButton = event.target.closest(".favoriteIconBtn");
-
-  if (!favoriteButton) return;
-
-  const gameId = String(favoriteButton.dataset.id);
-  const isTracked = trackedGames.includes(gameId);
-
-  try {
-    const endpoint = isTracked
-      ? "api/untrack-game.php"
-      : "api/track-game.php";
-
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        game_id: gameId
-      })
-    });
-
-    const data = await res.json();
-
-    if (!data.success) {
-      console.error(data.message || "Failed to update My List.");
-      return;
-    }
-
-    if (isTracked) {
-  trackedGames = trackedGames.filter(id => id !== gameId);
-
-  showToast("Game removed from your list");
-} else {
-  trackedGames.push(gameId);
-
-  showToast("Game added to your list");
-}
-
-applyFilters();
-
-  } catch (error) {
-    console.error("My List error:", error);
-  }
-});
-
-compareTrayGames.addEventListener("click", (event) => {
-  const removeButton = event.target.closest(".removeCompareGame");
-
-  if (!removeButton) return;
-
-  const gameId = String(removeButton.dataset.id);
-
-  selectedGames = selectedGames.filter(id => id !== gameId);
-
-  applyFilters();
-  updateCompareTray();
-});
-
-clearCompareBtn.addEventListener("click", () => {
-  selectedGames = [];
-
-  applyFilters();
-  updateCompareTray();
-});
-
-startComparisonBtn.addEventListener("click", () => {
-  if (selectedGames.length < 2) return;
-
-  const gameIds = selectedGames.join(",");
-
-  window.location.href = `comparison.html?games=${gameIds}`;
-});
-
-
-async function loadTrackedGames() {
-  try {
-    const res = await fetch("api/tracked-games.php");
-    const data = await res.json();
-
-    if (data.success) {
-      trackedGames = (data.games || []).map(game =>
-        String(game.game_id)
-      );
-    }
-  } catch (error) {
-    console.error("Cannot load tracked games:", error);
-  }
 }
 
 async function loadGames() {
@@ -337,22 +113,4 @@ if (sortFilter) {
   sortFilter.addEventListener("change", applyFilters);
 }
 
-
-
-async function initializeGamesPage() {
-  await loadTrackedGames();
-  await loadGames();
-}
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2500);
-}
-
-initializeGamesPage();
+loadGames();

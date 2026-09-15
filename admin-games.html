@@ -1,0 +1,415 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Games Management | DIR'A Admin</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+  <main class="page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <nav class="nav">
+
+      <a
+        href="admin-dashboard.html"
+        class="logo logo-switch"
+      >
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </a>
+
+
+      <div class="links">
+
+        <a href="admin-dashboard.html">
+          Dashboard
+        </a>
+
+        <a
+          class="active"
+          href="admin-games.html"
+        >
+          Games
+        </a>
+
+        <a href="admin-users.html">
+         Users
+        </a>
+
+
+        <a href="admin-reports.html">
+          Reports
+        </a>
+
+        <a href="admin-settings.html">
+          Settings
+        </a>
+
+
+        <a
+          class="btn"
+          href="main-home.html"
+        >
+          Log Out
+        </a>
+
+
+        <button
+          onclick="toggleTheme()"
+          class="icon"
+          type="button"
+        >
+          🌙
+        </button>
+
+      </div>
+
+    </nav>
+
+
+
+    <!-- =========================================
+         PAGE TITLE
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="admin-page-heading">
+
+        <div>
+
+          <p class="mini">
+            ADMIN / GAMES
+          </p>
+
+          <h1>
+            Games Management
+          </h1>
+
+          <p class="mini">
+            View and manage games available on the DIR'A platform.
+          </p>
+
+        </div>
+
+
+       <button
+  class="btn"
+  id="addGameBtn"
+  type="button"
+>
+  + Add Game
+</button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         SEARCH
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="toolbar admin-games-toolbar">
+
+        <div class="search">
+
+          <input
+            type="text"
+            id="adminGameSearch"
+            placeholder="Search games..."
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <select id="adminRiskFilter">
+
+          <option value="all">
+            All Risk Levels
+          </option>
+
+          <option value="new">
+            New
+          </option>
+
+          <option value="low">
+            Low
+          </option>
+
+          <option value="medium">
+            Medium
+          </option>
+
+          <option value="high">
+            High
+          </option>
+
+        </select>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         GAMES TABLE
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="tableWrap admin-games-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Game
+              </th>
+
+              <th>
+                Genre
+              </th>
+
+              <th>
+                Platform
+              </th>
+
+              <th>
+                Overall Risk
+              </th>
+
+              <th>
+                Risk Level
+              </th>
+
+              <th>
+                Analysis Status
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="adminGamesTable">
+
+            <tr>
+
+              <td colspan="7">
+                Loading games...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="footer">
+
+      <h3 class="footer-logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </h3>
+
+
+      <p class="mini">
+        DIR'A Administration
+      </p>
+
+    </footer>
+
+
+  </main>
+
+
+<!-- =========================================
+     ADD GAME MODAL
+========================================== -->
+
+<div
+  id="addGameModal"
+  class="admin-game-modal"
+>
+
+  <div class="admin-game-modal-box">
+
+    <button
+      id="closeAddGameModal"
+      class="closeBtn"
+      type="button"
+    >
+      ×
+    </button>
+
+
+    <p class="mini">
+      ADD NEW GAME
+    </p>
+
+    <h2>
+      Search Steam
+    </h2>
+
+    <p class="mini">
+      Enter the game name. DIR'A will retrieve its information automatically.
+    </p>
+
+
+    <div class="field">
+
+      <label for="steamGameSearch">
+        Game Name
+      </label>
+
+      <input
+        id="steamGameSearch"
+        type="text"
+        placeholder="e.g. Counter-Strike 2"
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <button
+      id="searchSteamBtn"
+      class="btn"
+      type="button"
+    >
+      Search
+    </button>
+
+
+    <p
+      id="steamSearchMessage"
+      class="mini admin-steam-message"
+    ></p>
+
+
+    <div
+      id="steamSearchResults"
+      class="admin-steam-results"
+    ></div>
+
+  </div>
+
+</div>
+<!-- =========================================
+     DELETE GAME CONFIRMATION
+========================================== -->
+
+<div
+  id="deleteGameModal"
+  class="confirmModal"
+>
+
+  <div class="confirmBox">
+
+    <h2>
+      Delete Game?
+    </h2>
+
+    <p class="mini">
+      Are you sure you want to delete
+      <strong id="deleteGameName"></strong>?
+    </p>
+
+    <p class="mini">
+      This action cannot be undone.
+    </p>
+
+
+    <div class="confirmActions">
+
+      <button
+        id="cancelDeleteGame"
+        class="admin-action-btn"
+        type="button"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        id="confirmDeleteGame"
+        class="btn"
+        type="button"
+      >
+        Delete Game
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+  <!-- =========================================
+       SCRIPTS
+  ========================================== -->
+
+  <script src="js/common.js"></script>
+
+  <script src="js/admin-games.js"></script>
+
+
+</body>
+
+</html>

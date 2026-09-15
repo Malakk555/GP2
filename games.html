@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Games</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="page">
+
+    <nav class="nav">
+      <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+      <div class="links">
+        <a href="home.html">Home</a>
+        <a class="active" href="games.html">Games</a>
+        <a href="my-reports.html">Reports</a>
+        <a href="tracked-games.html">My List</a>
+        <a class="btn" href="main-home.html">Log Out</a>
+        <button onclick="toggleTheme()" class="icon">🌙</button>
+        <a class="icon profileIcon" href="profile.html">👤</a>
+      </div>
+    </nav>
+
+    <section class="section">
+     <div class="toolbar">
+  <div class="search">
+    <input id="gameSearch" placeholder="search games... 🔍">
+  </div>
+
+ <div class="filterGroup">
+  <label for="riskFilter">Risk</label>
+
+  <select id="riskFilter">
+    <option value="all">All</option>
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+  </select>
+</div>
+
+<div class="filterGroup">
+  <label for="sortFilter">Sort by</label>
+
+  <select id="sortFilter">
+    <option value="default">Default</option>
+    <option value="riskHigh">Highest Risk</option>
+    <option value="riskLow">Lowest Risk</option>
+    <option value="nameAZ">Name A-Z</option>
+    <option value="nameZA">Name Z-A</option>
+  </select>
+</div>
+
+  <a class="btn" href="comparison.html">Compare ↔</a>
+</div>
+
+      <div class="gamesGrid" id="gamesGrid"></div>
+    </section>
+
+    <footer class="footer">
+      <h3 class="footer-logo logo-switch">
+  <img src="images/black-logo.png" alt="Dir Logo" class="logo-light">
+  <img src="images/white-logo.png" alt="Dir Logo" class="logo-dark">
+</h3>
+      <div class="social">○ □ △ ×</div>
+            <p class="mini">
+  <a href="about.html">About Us</a>
+</p>
+    </footer>
+
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/games.js"></script>
+</body>
+
+</html>

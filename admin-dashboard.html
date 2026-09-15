@@ -1,0 +1,385 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Admin Dashboard | DIR'A</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main class="page">
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <nav class="nav">
+
+      <a
+        href="admin-dashboard.html"
+        class="logo logo-switch"
+      >
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </a>
+
+
+      <div class="links">
+
+        <a
+          class="active"
+          href="admin-dashboard.html"
+        >
+          Dashboard
+        </a>
+
+        <a href="admin-games.html">
+          Games
+        </a>
+
+        <a href="admin-users.html">
+          Users
+        </a> 
+
+
+        <a href="admin-complaints.html">Complaints</a>
+
+        <a href="admin-settings.html">
+          Settings
+        </a>
+
+        <a
+          class="btn"
+          href="main-home.html"
+        >
+          Log Out
+        </a>
+
+        <button
+          onclick="toggleTheme()"
+          class="icon"
+          type="button"
+        >
+          🌙
+        </button>
+
+      </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         TITLE
+    ========================================== -->
+
+    <section class="section">
+
+      <p class="mini">
+        DIR'A ADMINISTRATION
+      </p>
+
+      <h1>
+        Admin Dashboard
+      </h1>
+
+      <p class="mini">
+        Overview of the DIR'A platform and its current activity.
+      </p>
+
+    </section>
+
+
+    <!-- =========================================
+         SUMMARY CARDS
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="admin-dashboard-cards">
+
+        <div class="dashBox">
+
+          <span class="pill">
+            Total Games
+          </span>
+
+          <h2>
+            <span id="adminTotalGames">0</span>
+            🎮
+          </h2>
+
+          <p class="mini">
+            Games currently available on DIR'A
+          </p>
+
+        </div>
+
+
+        <div class="dashBox">
+
+          <span class="pill">
+            Total Users
+          </span>
+
+          <h2>
+            <span id="adminTotalUsers">0</span>
+            👥
+          </h2>
+
+          <p class="mini">
+            Individual users registered on the platform
+          </p>
+
+        </div>
+
+
+        <div class="dashBox">
+
+          <span class="pill">
+            Government Employees
+          </span>
+
+          <h2>
+            <span id="adminTotalEmployees">0</span>
+            🏢
+          </h2>
+
+          <p class="mini">
+            Government employee accounts
+          </p>
+
+        </div>
+
+
+        <div class="dashBox">
+
+          <span class="pill">
+            Total Reports
+          </span>
+
+          <h2>
+            <span id="adminTotalReports">0</span>
+            🚩
+          </h2>
+
+          <p class="mini">
+            Reports submitted across the platform
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         RECENT GAMES
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="admin-section-heading">
+
+        <div>
+
+          <h2>
+            Recently Added Games
+          </h2>
+
+          <p class="mini">
+            Latest games added to the DIR'A platform.
+          </p>
+
+        </div>
+
+        <a
+          class="admin-action-btn"
+          href="admin-games.html"
+        >
+          View All Games
+        </a>
+
+      </div>
+
+
+      <div class="tableWrap admin-dashboard-table">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Game
+              </th>
+
+              <th>
+                Genre
+              </th>
+
+              <th>
+                Risk Level
+              </th>
+
+              <th>
+                Analysis
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="adminRecentGames">
+
+            <tr>
+
+              <td colspan="4">
+                Loading games...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         RECENT USERS
+    ========================================== -->
+
+    <section class="section">
+
+      <div class="admin-section-heading">
+
+        <div>
+
+          <h2>
+            Recent Users
+          </h2>
+
+          <p class="mini">
+            Most recently registered individual users.
+          </p>
+
+        </div>
+
+        <a
+          class="admin-action-btn"
+          href="admin-users.html"
+        >
+          Manage Users
+        </a>
+
+      </div>
+
+
+      <div class="tableWrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                User
+              </th>
+
+              <th>
+                Email
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Joined
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="adminRecentUsers">
+
+            <tr>
+
+              <td colspan="4">
+                Loading users...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="footer">
+
+      <h3 class="footer-logo logo-switch">
+
+        <img
+          src="images/black-logo.png"
+          class="logo-light"
+          alt="DIR'A Logo"
+        >
+
+        <img
+          src="images/white-logo.png"
+          class="logo-dark"
+          alt="DIR'A Logo"
+        >
+
+      </h3>
+
+      <p class="mini">
+        DIR'A Administration
+      </p>
+
+    </footer>
+
+  </main>
+
+
+  <script src="js/common.js"></script>
+
+  <script src="js/admin-dashboard.js"></script>
+
+</body>
+
+</html>

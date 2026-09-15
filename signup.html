@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <a href="main-home.html" class="logo logo-switch">
+  <img src="images/black-logo.png" class="logo-light">
+  <img src="images/white-logo.png" class="logo-dark">
+</a>
+      <div class="links">
+        <a href="main-home.html">Home</a>
+        <a href="about.html">About us</a>
+        <a class="btn" href="login.html">Sign in</a>
+        <a class="btn" href="signup.html">Register</a>
+        <button onclick="toggleTheme()" class="icon">🌙</button>
+      </div>
+    </nav>
+
+    <section class="split">
+      <div class="darkPanel">
+        <div>
+          <h1>Welcome To DIR’A!</h1>
+          <p>Sign up now and play safe!</p>
+          <a class="btn light" href="login.html">Log In</a>
+        </div>
+      </div>
+
+      <form id="signupForm" class="formPanel animate" autocomplete="on">
+        <h1>Create Account</h1>
+        <div id="signupMessage" class="formMessage" hidden></div>
+
+        <div class="row">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" name="first_name" placeholder="Enter your first name" required>
+          </div>
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="last_name" placeholder="Enter your last name" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="signupEmail">Email</label>
+          <input id="signupEmail" name="email" type="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="field">
+  <label for="signupPassword">Password</label>
+
+  <input
+    id="signupPassword"
+    name="password"
+    type="password"
+    placeholder="Enter your password"
+    required
+  >
+
+  <small class="passwordHint">
+    Password must be at least 8 characters and include both letters and numbers.
+  </small>
+</div>
+
+        
+
+
+        <button id="signupBtn" class="btn light" type="submit">Sign Up</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/signup.js"></script>
+</body>
+</html>
