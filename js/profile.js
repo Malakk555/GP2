@@ -8,6 +8,8 @@ async function loadProfile() {
   const res = await fetch("api/profile.php");
   const data = await res.json();
 
+  if (handleSessionExpired(data)) return;
+
   if (!data.success) {
     message.textContent = "Cannot load profile.";
     return;
@@ -21,7 +23,7 @@ async function loadProfile() {
   emailInput.value = user.email || "";
   setAvatar(user.profile_avatar || "default");
   document.getElementById("joinDate").value =
-    user.created_at.split(" ")[0];
+    user.created_at ? String(user.created_at).split(" ")[0] : "";
 }
 
 saveBtn.addEventListener("click", async function (e) {
@@ -38,6 +40,8 @@ formData.append("profile_avatar", selectedAvatar);
   });
 
   const data = await res.json();
+
+if (handleSessionExpired(data)) return;
 
 if (data.success) {
   localStorage.setItem("profile_avatar", selectedAvatar);

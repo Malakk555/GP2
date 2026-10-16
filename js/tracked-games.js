@@ -1,7 +1,7 @@
 const grid = document.getElementById("trackedGrid");
 
 function card(game) {
-  const isNew = game.analysis_status === "no_comments" || Number(game.comments_count || 0) === 0;
+  const isNew = game.analysis_status !== "analyzed" || Number(game.comments_count || 0) === 0;
 const riskClass = isNew ? "new-pill" : `risk-${String(game.overall_risk_level || "Low").toLowerCase()}`;
   return `
     <article class="card">
@@ -54,7 +54,11 @@ async function loadTracked() {
   const res = await fetch("api/tracked-games.php");
   const data = await res.json();
 
-  if (data.success) {
+  if (handleSessionExpired(data)) return;
+
+  if (data.success && data.games.length === 0) {
+    grid.innerHTML = `<p>No tracked games yet.</p>`;
+  } else if (data.success) {
     grid.innerHTML = data.games.map(card).join("");
   } else {
     grid.innerHTML = `<p>${data.message}</p>`;

@@ -13,7 +13,7 @@ let currentGames = [];
 let trackedGames = [];
 
 function card(game) {
-  const isNew = game.analysis_status === "no_comments";
+  const isNew = game.analysis_status !== "analyzed" || Number(game.comments_count || 0) === 0;
   const riskClass = isNew ? "" : `risk-${String(game.overall_risk_level || "Low").toLowerCase()}`;
   
   return `

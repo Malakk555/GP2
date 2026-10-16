@@ -160,9 +160,10 @@ async function loadGameDetails() {
     }
 
     const game = data.game;
+    setTrackButton(Number(game.is_tracked || 0) === 1);
 
     const isNoAnalysis =
-  game.analysis_status === "no_comments" ||
+  game.analysis_status !== "analyzed" ||
   Number(game.comments_count || 0) === 0;
 
 const noAnalysisMessage = document.getElementById("noAnalysisMessage");
@@ -308,7 +309,40 @@ function closeReportModal() {
   if (reportModal) reportModal.classList.remove("show");
 }
 
+let isTracked = false;
+
+function setTrackButton(tracked) {
+  isTracked = !!tracked;
+  const btn = document.getElementById("trackGameBtn");
+  if (!btn) return;
+  btn.textContent = isTracked ? "Tracked ✓" : "Track";
+  btn.classList.toggle("tracked", isTracked);
+}
+
+function untrackGameFromDetails() {
+  fetch("api/untrack-game.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ game_id: gameId })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (handleSessionExpired(data)) return;
+      if (data.success) {
+        setTrackButton(false);
+        showToast("Game removed from your list.");
+      } else {
+        showToast(data.message || "Error removing game.");
+      }
+    });
+}
+
 function trackGame() {
+  if (isTracked) {
+    untrackGameFromDetails();
+    return;
+  }
+
   if (!gameId) {
     alert("Missing game_id.");
     return;
@@ -325,6 +359,8 @@ function trackGame() {
   })
     .then(res => res.json())
     .then(data => {
+  if (handleSessionExpired(data)) return;
+  if (data.success || /already/i.test(data.message || "")) setTrackButton(true);
   showToast(data.message || "Game added to your list.");
 })
     .catch(error => {

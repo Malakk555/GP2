@@ -476,3 +476,17 @@ function setActiveNavLink() {
 }
 }
 
+
+
+// Called when an API answers "Not logged in": the browser still thinks the
+// user is logged in (localStorage) but the server session is gone.
+function handleSessionExpired(data) {
+  const msg = String((data && data.message) || '').toLowerCase();
+  if (data && data.success === false && msg.includes('not logged in')) {
+    localStorage.removeItem('diraUser');
+    alert('Your session has expired. Please log in again.');
+    window.location.href = 'login.html';
+    return true;
+  }
+  return false;
+}

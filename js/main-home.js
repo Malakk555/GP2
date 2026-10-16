@@ -1,7 +1,7 @@
 const track = document.getElementById("featuredGamesTrack");
 
 function card(game) {
-  const isNew = game.analysis_status === "no_comments" || Number(game.comments_count || 0) === 0;
+  const isNew = game.analysis_status !== "analyzed" || Number(game.comments_count || 0) === 0;
 const riskClass = isNew ? "new-pill" : `risk-${String(game.overall_risk_level || "Low").toLowerCase()}`;
   return `
     <article class="card marquee-card">

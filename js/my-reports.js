@@ -10,6 +10,8 @@ async function loadReports() {
     const res = await fetch("api/my-reports.php");
     const data = await res.json();
 
+    if (handleSessionExpired(data)) return;
+
     if (!data.success) {
       reportsBody.innerHTML = `
         <tr>
@@ -22,7 +24,7 @@ async function loadReports() {
     if (data.reports.length === 0) {
       reportsBody.innerHTML = `
         <tr>
-          <td colspan="5">No reports found.</td>
+          <td colspan="5">You have no reports yet. Use "+ Add Report" to report a game.</td>
         </tr>
       `;
       return;
