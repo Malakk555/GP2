@@ -15,8 +15,8 @@ SELECT
 
     overall_risk_percent,
     overall_risk_level,
-    analysis_status,
-    comments_count,
+    COALESCE(analysis_status, 'no_comments') AS analysis_status,
+    COALESCE(comments_count, 0) AS comments_count,
 
     bullying,
     sexual_harassment,
